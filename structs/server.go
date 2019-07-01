@@ -2,8 +2,8 @@ package structs
 
 // Server ...
 type Server struct {
-	IP        int         `json:"id"`
-	Os        string      `json:"os"`
-	Softwares *[]Software `json:"software"`
-	SSHs      *[]SSH      `json:"ssh"`
+	IP       int        `json:"id"`
+	Os       string     `json:"os"`
+	Software []Software `json:"software"`
+	SSH      []SSH      `json:"ssh"`
 }
