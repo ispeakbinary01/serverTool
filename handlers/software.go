@@ -10,6 +10,21 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func putHelper(id int) bool {
+	var count int
+
+	row := db.Get().QueryRow("SELECT COUNT(*) FROM software")
+	err := row.Scan(&count)
+	if err != nil {
+		panic(err)
+	}
+	if id < count {
+		return true
+	}
+
+	return false
+}
+
 // PostSoftware ...
 func PostSoftware(c echo.Context) error {
 	software := new(structs.Software)
@@ -74,4 +89,62 @@ func GetSoftwareID(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response)
 
+}
+
+// DeleteSoftware ...
+func DeleteSoftware(c echo.Context) error {
+	requestID := c.Param("id")
+	requestName := c.Param("name")
+	sql := "DELETE FROM software WHERE id = ?"
+	stmt, err := db.Get().Prepare(sql)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err2 := stmt.Exec(requestID)
+	if err2 != nil {
+		panic(err2)
+	}
+
+	return c.JSON(http.StatusOK, "Deleted software with name "+requestName)
+}
+
+// UpdateSoftware ...
+func UpdateSoftware(c echo.Context) error {
+	updatedSoftware := new(structs.Software)
+	requestID, _ := strconv.Atoi(c.Param("id"))
+	if err := c.Bind(updatedSoftware); err != nil {
+		return err
+	}
+	if putHelper(requestID) {
+		sql := "UPDATE software SET name = ?, version = ? WHERE id = ?"
+		stmt, err := db.Get().Prepare(sql)
+		if err != nil {
+			panic(err)
+		}
+		_, err2 := stmt.Exec(updatedSoftware.Name, updatedSoftware.Version, requestID)
+		if err2 != nil {
+			panic(err2)
+		}
+
+		return c.JSON(http.StatusAccepted, "Updated!")
+	}
+	sql := "INSERT INTO software(name, version) VALUES(?, ?)"
+	stmt, err := db.Get().Prepare(sql)
+
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	defer stmt.Close()
+
+	result, err2 := stmt.Exec(updatedSoftware.Name, updatedSoftware.Version)
+
+	if err2 != nil {
+		panic(err2)
+	}
+
+	fmt.Println(result.LastInsertId())
+
+	return c.JSON(http.StatusCreated, updatedSoftware.Name)
 }
