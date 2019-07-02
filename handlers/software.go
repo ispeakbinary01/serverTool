@@ -10,7 +10,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func putHelper(id int) bool {
+// PutHelper ...
+func PutHelper(id int) bool {
 	var count int
 
 	row := db.Get().QueryRow("SELECT COUNT(*) FROM software")
@@ -116,7 +117,7 @@ func UpdateSoftware(c echo.Context) error {
 	if err := c.Bind(updatedSoftware); err != nil {
 		return err
 	}
-	if putHelper(requestID) {
+	if PutHelper(requestID) {
 		sql := "UPDATE software SET name = ?, version = ? WHERE id = ?"
 		stmt, err := db.Get().Prepare(sql)
 		if err != nil {
