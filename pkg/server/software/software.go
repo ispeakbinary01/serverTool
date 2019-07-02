@@ -1,4 +1,4 @@
-package structs
+package software
 
 // Software ...
 type Software struct {

@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-
+	"github.com/ispeakbinary01/serverTool/pkg/software"
 	"github.com/ispeakbinary01/serverTool/db"
-	"github.com/ispeakbinary01/serverTool/structs"
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,7 +27,7 @@ func PutHelper(id int) bool {
 
 // PostSoftware ...
 func PostSoftware(c echo.Context) error {
-	software := new(structs.Software)
+	software := new(software.Software)
 	if err := c.Bind(software); err != nil {
 		return err
 	}
@@ -71,7 +70,7 @@ func GetSoftware(c echo.Context) error {
 		panic(err)
 	}
 
-	response := structs.Software{ID: id, Name: name, Version: version}
+	response := software.Software{ID: id, Name: name, Version: version}
 
 	return c.JSON(http.StatusOK, response)
 }

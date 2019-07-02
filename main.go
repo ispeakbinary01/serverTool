@@ -18,6 +18,10 @@ func main() {
 	api.GET("/inventory/ssh", handlers.GetSSHs)
 	api.GET("/inventory/ssh/:id", handlers.GetSSH)
 	api.DELETE("/inventory/ssh/:id", handlers.DeleteSSH)
+	api.POST("/user", handlers.PostUser)
+	api.GET("/users", handlers.GetUsers)
+	api.GET("/user/:id", handlers.GetUser)
+	api.DELETE("/user/:id", handlers.DeleteUser)
 
 	api.Start(":8080")
 

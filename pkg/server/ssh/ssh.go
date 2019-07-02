@@ -1,4 +1,4 @@
-package structs
+package ssh
 
 // SSH ...
 type SSH struct {
@@ -6,4 +6,10 @@ type SSH struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Key      int    `json:"key"`
+}
+
+// NewSSH ...
+func NewSSH() *SSH {
+	SSH := &SSH{}
+	return SSH
 }
