@@ -14,6 +14,7 @@ func PostSSH(c echo.Context) error {
 	}
 	sshId, err := ssh.CreateSSH()
 	if err != nil {
+		fmt.Print(err)
 		return err
 	}
 	ssh.ID = sshId

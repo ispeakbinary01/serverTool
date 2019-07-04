@@ -10,11 +10,11 @@ func main() {
 	api := echo.New()
 
 	api.POST("/inventories/software", handlers.PostSoftware)
-	api.GET("/inventories/software", handlers.GetAllSoftware)
+	api.GET("/inventories/software", handlers.GetAllSoftware) // Returns all but doesn't fill in data
 	api.GET("/inventories/software/:id", handlers.GetSoftwareByID)
-	api.DELETE("/inventories/software/:id", handlers.DeleteSoftware)
+	api.DELETE("/inventories/software/:id", handlers.DeleteSoftware) // Deletes but returns null
 	api.PUT("/inventories/software/:id", handlers.UpdateSoftware)
-	api.POST("/inventories/ssh", handlers.PostSSH)
+	api.POST("/inventories/ssh", handlers.PostSSH) // sql: expected 3 arguments, got 2
 	api.GET("/inventories/ssh", handlers.GetSSHs)
 	api.GET("/inventories/ssh/:id", handlers.GetSSH)
 	api.DELETE("/inventories/ssh/:id", handlers.DeleteSSH)
