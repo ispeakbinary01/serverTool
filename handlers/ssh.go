@@ -2,9 +2,10 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/ispeakbinary01/serverTool/pkg/user"
 	"net/http"
 	"strconv"
-	"github.com/ispeakbinary01/serverTool/pkg/ssh"
+	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
 	"github.com/ispeakbinary01/serverTool/db"
 	"github.com/labstack/echo/v4"
 )
@@ -15,35 +16,38 @@ func PostSSH(c echo.Context) error {
 	if err := c.Bind(ssh); err != nil {
 		return err
 	}
-	sshid, err := ssh.CreateSSH()
+	sshId, err := ssh.CreateSSH()
 	if err != nil {
 		return err
 	}
-	ssh.ID = sshid
+	ssh.ID = sshId
 	return c.JSON(201, ssh)
 }
 
 // GetSSHs ...
 func GetSSHs(c echo.Context) error {
-	ssh := ssh.SSHsQuery()
+	response, err := ssh.GetAllSSHs()
+	if err != nil {
+		return err
+	}
 
-	return c.JSON(http.StatusOK, ssh)
-
+	return c.JSON(200, response)
 }
 
 // GetSSH ...
 func GetSSH(c echo.Context) error {
-	requestedID := c.Param("id")
-	ssh := ssh.SSHQuery(requestedID)
-	return c.JSON(http.StatusOK, ssh)
+	requestID := c.Param("id")
+	ssh := ssh.GetSShByID(requestID)
+
+	return c.JSON(200, ssh)
 }
 
 // DeleteSSH ...
 func DeleteSSH(c echo.Context) error {
 	requestID := c.Param("id")
-	ssh := ssh.DeleteSSHQuery(requestID)
+	ssh := ssh.DeleteSSH(requestID)
 
-	return c.JSON(http.StatusOK, ssh)
+	return c.JSON(200, ssh)
 }
 
 // UpdateSSH ...

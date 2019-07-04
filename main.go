@@ -10,10 +10,10 @@ func main() {
 	api := echo.New()
 
 	api.POST("/inventory/software", handlers.PostSoftware)
-	api.GET("/inventory/software", handlers.GetSoftware)
-	api.GET("/inventory/software/:id", handlers.GetSoftwareID)
+	api.GET("/inventory/software", handlers.GetAllSoftwarae)
+	api.GET("/inventory/software/:id", handlers.GetSoftwareByID)
 	api.DELETE("/inventory/software/:id", handlers.DeleteSoftware)
-	api.PUT("/inventory/software/:id", handlers.UpdateSoftware)
+	//api.PUT("/inventory/software/:id", handlers.UpdateSoftware)
 	api.POST("/inventory/ssh", handlers.PostSSH)
 	api.GET("/inventory/ssh", handlers.GetSSHs)
 	api.GET("/inventory/ssh/:id", handlers.GetSSH)

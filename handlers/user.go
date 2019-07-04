@@ -1,11 +1,8 @@
 package handlers
 
 import (
-	"fmt"
-	"github.com/ispeakbinary01/serverTool/db"
 	"github.com/ispeakbinary01/serverTool/pkg/user"
 	"github.com/labstack/echo/v4"
-	"net/http"
 )
 
 // PostUser ...
@@ -24,7 +21,10 @@ func PostUser(c echo.Context) error {
 
 // GetUsers ...
 func GetUsers(c echo.Context) error {
-	response := user.GetAllUsers()
+	response, err := user.GetAllUsers()
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(200, response)
 }
@@ -42,6 +42,6 @@ func DeleteUser(c echo.Context) error {
 	requestID := c.Param("id")
 	u := user.DeleteUser(requestID)
 
-	return c.JSON(200, "Deleted" + u)
+	return c.JSON(200, u)
 }
  

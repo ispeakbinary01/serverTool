@@ -6,3 +6,9 @@ type Software struct {
 	Name    string `json:"name"`
 	Version int    `json:"version"`
 }
+
+// NewSoftware ...
+func NewSoftware() *Software {
+	software := &Software{}
+	return software
+}

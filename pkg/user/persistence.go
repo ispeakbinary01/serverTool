@@ -24,38 +24,49 @@ func (u *User) CreateUser() (int, error) {
 }
 
 // GetAllUsers ...
-func GetAllUsers() ([]User{}, error) {
+func GetAllUsers() ([]User, error) {
 	us := []User{}
 	res, err := db.Get().Query(getUsers)
 	for res.Next() {
 		u := User{}
-		res.Scan(&u.Username, &u.Emai)
+		res.Scan(&u.Username, &u.Email)
 		us = append(us, u)
 		// fmt.Printf("%v+\n")
 	}
 	if err != nil {
 		return nil, err
 	}
-	return us
+	return us, nil
 }
 
 // GetUserByID ...
-func GetUserByID(id int) (*User, error) {
+func GetUserByID(id string) *User {
 	u := User{}
-	if err := db.Get().QueryRow(getUser, id); err != nil {
-		return nil, err
+	res := db.Get().QueryRow(getUser, id)
+	if res != nil {
+		return nil
 	}
-	err.Scan(&u.Username, &u.Email)
-	return &u, nil
+	err:= res.Scan(u.Username, u.Email)
+	if err != nil {
+		panic(err)
+	}
+
+	return &u
+	//if err := db.Get().QueryRow(getUser, id); err != nil {
+	//	return nil, err
+	//}
+	//err.Scan(&u.Username, &u.Email)
+	//return &u, nil
 }
 
 // DeleteUser ...
-func DeleteUser(id int) error {
+func DeleteUser(id string) error {
 	stmt, err := db.Get().Prepare(deleteUser)
 	if err != nil { 
 		return err
 	}
-	if err :s= stmt.Exec(id); err != nil {
+	_, err = stmt.Exec(id)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -66,12 +77,13 @@ DELETE FROM user WHERE id = ?
 `
 
 const getUser = `
-SELECT name, email FROM user WHERE id = ?
+SELECT username, email FROM user WHERE id = ?
 `
 
 const getUsers = `
 SELECT username, email FROM user
 `
+
 
 const createUser = `
 INSERT INTO user(username, email, password) VALUES(?, ?, ?)
