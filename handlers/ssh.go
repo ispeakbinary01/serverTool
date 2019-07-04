@@ -2,11 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/ispeakbinary01/serverTool/pkg/user"
-	"net/http"
-	"strconv"
 	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
-	"github.com/ispeakbinary01/serverTool/db"
 	"github.com/labstack/echo/v4"
 )
 
@@ -37,8 +33,11 @@ func GetSSHs(c echo.Context) error {
 // GetSSH ...
 func GetSSH(c echo.Context) error {
 	requestID := c.Param("id")
-	ssh := ssh.GetSShByID(requestID)
-
+	ssh, err := ssh.GetSShByID(requestID)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 	return c.JSON(200, ssh)
 }
 
@@ -51,13 +50,16 @@ func DeleteSSH(c echo.Context) error {
 }
 
 // UpdateSSH ...
-// func UpdateSSH(c echo.Context) error {
-// 	updatedSSH := new(structs.SSH)
-// 	requestID, _ := strconv.Atoi(c.Param("id"))
-// 	if err := c.Bind(updatedSSH); err != nil {
-// 		return err
-// 	}
-// 	if PutHelper(requestID) {
-// 		sql := "UPDATE ssh SET "
-// 	}
-// }
+func UpdateSSH(c echo.Context) error {
+	requestID := c.Param("id")
+	ssh := ssh.NewSSH()
+	if err := c.Bind(ssh); err != nil {
+		return err
+	}
+	sshid, err := ssh.UpdateSSH(requestID)
+	if err != nil {
+		return err
+	}
+	return c.JSON(201, sshid)
+
+}

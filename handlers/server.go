@@ -1,36 +1,68 @@
 package handlers
 
-// import (
-// 	"fmt"
-// 	"net/http"
+import (
+	"fmt"
+	"github.com/ispeakbinary01/serverTool/pkg/server"
+	"github.com/labstack/echo/v4"
+)
 
-// 	"github.com/ispeakbinary01/serverTool/db"
-// 	"github.com/labstack/echo/v4"
-// )
+// PostServer ...
+func PostServer(c echo.Context) error {
+	s := server.NewServer()
+	if err := c.Bind(s); err != nil {
+		fmt.Println(err)
+		return err
+	}
+	seID, err := s.CreateServer()
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return c.JSON(201, seID)
+}
 
-// // PostServer ...
-// func PostServer(c echo.Context) error {
-// 	server := new(structs.Server)
-// 	if err := c.Bind(server); err != nil {
-// 		return err
-// 	}
+//// GetAllSoftware ...
+//func GetAllSoftware(c echo.Context) error {
+//	response, err := software.GetAllSoftware()
+//	if err != nil {
+//		return err
+//	}
+//
+//	return c.JSON(200, response)
+//}
+//
+//// GetSoftwareByID ...
+//func GetSoftwareByID(c echo.Context) error {
+//	requestID := c.Param("id")
+//	s, err := software.GetSoftwareByID(requestID)
+//	if err != nil {
+//		fmt.Println(err)
+//		return err
+//	}
+//	return c.JSON(200, s)
+//}
+//
+//// DeleteSoftware ...
+//func DeleteSoftware(c echo.Context) error {
+//	requestID := c.Param("id")
+//	s := software.DeleteSoftware(requestID)
+//
+//	return c.JSON(200, s)
+//}
+//
+//// UpdateSoftware ...
+//func UpdateSoftware(c echo.Context) error {
+//	requestID := c.Param("id")
+//	sw := software.NewSoftware()
+//	if err := c.Bind(sw); err != nil {
+//		return err
+//	}
+//	swid, err := sw.UpdateSoftware(requestID)
+//	if err != nil {
+//		return err
+//	}
+//	return c.JSON(201, swid)
+//
+//}
 
-// 	sql := "INSERT INTO server(ip, os, software, ssh) VALUES(?, ?, ?, ?)"
-// 	stmt, err := db.Get().Prepare(sql)
 
-// 	if err != nil {
-// 		fmt.Print(err.Error())
-// 	}
-
-// 	defer stmt.Close()
-
-// 	res, err2 := stmt.Exec(server.IP, server.Os, server.Software, server.SSH)
-
-// 	if err2 != nil {
-// 		panic(err2)
-// 	}
-
-// 	fmt.Println(res.LastInsertId())
-
-// 	return c.JSON(http.StatusCreated, server.IP)
-// }

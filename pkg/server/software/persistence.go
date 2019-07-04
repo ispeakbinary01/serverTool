@@ -1,6 +1,9 @@
 package software
 
-import "github.com/ispeakbinary01/serverTool/db"
+import (
+	"fmt"
+	"github.com/ispeakbinary01/serverTool/db"
+)
 
 // CreateSoftware ...
 func (s *Software) CreateSoftware() (int, error) {
@@ -37,18 +40,18 @@ func GetAllSoftware() ([]Software, error) {
 }
 
 // GetSoftwareByID ...
-func GetSoftwareByID(id string) *Software {
+func GetSoftwareByID(id string) (*Software, error) {
 	s := Software{}
 	res := db.Get().QueryRow(getSoftware, id)
-	if res != nil {
-		return nil
+	if res == nil {
+		return nil, nil
 	}
-	err:= res.Scan(s.Name, s.Version)
+	err := res.Scan(&s.Name, &s.Version)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return &s
+	return &s, nil
 }
 
 // DeleteSoftware ...
@@ -62,6 +65,27 @@ func DeleteSoftware(id string) error {
 		return err
 	}
 	return nil
+}
+
+// UpdateSoftware ...
+func (sw *Software) UpdateSoftware(id string) (*Software, error) {
+	//requestID, _ := strconv.Atoi(c.Param("id"))
+	//if err := c.Bind(updatedSoftware); err != nil {
+	//	return err
+	//}
+	stmt, err := db.Get().Prepare(updateSoftware)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	res, err2 := stmt.Exec(&sw.Name, &sw.Version, id)
+	if err2 != nil {
+		fmt.Println(err2)
+		return nil, err2
+	}
+	res.LastInsertId()
+
+	return sw, nil
 }
 
 const deleteSoftware = `
@@ -80,3 +104,8 @@ SELECT id, name, version FROM software
 const createSoftware = `
 INSERT INTO software(name, version) VALUES(?, ?)
 `
+
+const updateSoftware = `
+UPDATE software SET name = ?, version = ? WHERE id = ?
+`
+

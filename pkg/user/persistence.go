@@ -1,7 +1,7 @@
 package user
 
 import (
-
+	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
 )
 
@@ -40,18 +40,18 @@ func GetAllUsers() ([]User, error) {
 }
 
 // GetUserByID ...
-func GetUserByID(id string) *User {
+func GetUserByID(id string) (*User, error) {
 	u := User{}
 	res := db.Get().QueryRow(getUser, id)
-	if res != nil {
-		return nil
+	if res == nil {
+		return nil, nil
 	}
-	err:= res.Scan(u.Username, u.Email)
+	err:= res.Scan(&u.Username, &u.Email)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return &u
+	return &u, nil
 	//if err := db.Get().QueryRow(getUser, id); err != nil {
 	//	return nil, err
 	//}
@@ -67,10 +67,32 @@ func DeleteUser(id string) error {
 	}
 	_, err = stmt.Exec(id)
 	if err != nil {
+
 		return err
 	}
 	return nil
-} 
+}
+
+// UpdateUser ...
+func (u *User) UpdateUser(id string) (*User, error) {
+	//requestID, _ := strconv.Atoi(c.Param("id"))
+	//if err := c.Bind(updatedSoftware); err != nil {
+	//	return err
+	//}
+		stmt, err := db.Get().Prepare(updateUser)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		res, err2 := stmt.Exec(&u.Username, &u.Email, id)
+		if err2 != nil {
+			fmt.Println(err2)
+			return nil, err2
+		}
+		res.LastInsertId()
+
+		return u, nil
+}
 
 const deleteUser = `
 DELETE FROM user WHERE id = ?
@@ -86,5 +108,9 @@ SELECT username, email FROM user
 
 
 const createUser = `
-INSERT INTO user(username, email, password) VALUES(?, ?, ?)
+INSERT INTO user (username, email, password) VALUES (?, ?, ?)
+`
+
+const updateUser = `
+UPDATE user SET username = ?, email = ? WHERE id = ?
 `

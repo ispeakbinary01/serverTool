@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/ispeakbinary01/serverTool/pkg/server/software"
 	"github.com/labstack/echo/v4"
 )
@@ -36,7 +37,7 @@ func PostSoftware(c echo.Context) error {
 }
 
 // GetAllSoftware ...
-func GetAllSoftwarae(c echo.Context) error {
+func GetAllSoftware(c echo.Context) error {
 	response, err := software.GetAllSoftware()
 	if err != nil {
 		return err
@@ -48,8 +49,11 @@ func GetAllSoftwarae(c echo.Context) error {
 // GetSoftwareByID ...
 func GetSoftwareByID(c echo.Context) error {
 	requestID := c.Param("id")
-	s := software.GetSoftwareByID(requestID)
-
+	s, err := software.GetSoftwareByID(requestID)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 	return c.JSON(200, s)
 }
 
@@ -62,41 +66,16 @@ func DeleteSoftware(c echo.Context) error {
 }
 
 // UpdateSoftware ...
-//func UpdateSoftware(c echo.Context) error {
-//	updatedSoftware := new(structs.Software)
-//	requestID, _ := strconv.Atoi(c.Param("id"))
-//	if err := c.Bind(updatedSoftware); err != nil {
-//		return err
-//	}
-//	if PutHelper(requestID) {
-//		sql := "UPDATE software SET name = ?, version = ? WHERE id = ?"
-//		stmt, err := db.Get().Prepare(sql)
-//		if err != nil {
-//			panic(err)
-//		}
-//		_, err2 := stmt.Exec(updatedSoftware.Name, updatedSoftware.Version, requestID)
-//		if err2 != nil {
-//			panic(err2)
-//		}
-//
-//		return c.JSON(http.StatusAccepted, "Updated!")
-//	}
-//	sql := "INSERT INTO software(name, version) VALUES(?, ?)"
-//	stmt, err := db.Get().Prepare(sql)
-//
-//	if err != nil {
-//		fmt.Print(err.Error())
-//	}
-//
-//	defer stmt.Close()
-//
-//	result, err2 := stmt.Exec(updatedSoftware.Name, updatedSoftware.Version)
-//
-//	if err2 != nil {
-//		panic(err2)
-//	}
-//
-//	fmt.Println(result.LastInsertId())
-//
-//	return c.JSON(http.StatusCreated, updatedSoftware.Name)
-//}
+func UpdateSoftware(c echo.Context) error {
+	requestID := c.Param("id")
+	sw := software.NewSoftware()
+	if err := c.Bind(sw); err != nil {
+		return err
+	}
+	swid, err := sw.UpdateSoftware(requestID)
+	if err != nil {
+		return err
+	}
+	return c.JSON(201, swid)
+
+}

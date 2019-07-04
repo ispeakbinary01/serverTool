@@ -32,7 +32,10 @@ func GetUsers(c echo.Context) error {
 // GetUser ...
 func GetUser(c echo.Context) error {
 	requestID := c.Param("id")
-	u := user.GetUserByID(requestID)
+	u, err := user.GetUserByID(requestID)
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(200, u)
 }
@@ -43,5 +46,20 @@ func DeleteUser(c echo.Context) error {
 	u := user.DeleteUser(requestID)
 
 	return c.JSON(200, u)
+}
+
+// UpdateUser ...
+func UpdateUser(c echo.Context) error {
+	requestID := c.Param("id")
+	u := user.NewUser()
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+	uid, err := u.UpdateUser(requestID)
+	if err != nil {
+		return err
+	}
+	return c.JSON(201, uid)
+
 }
  

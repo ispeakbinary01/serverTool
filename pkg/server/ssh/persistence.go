@@ -1,6 +1,7 @@
 package ssh
 
 import (
+	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
 )
 
@@ -39,18 +40,18 @@ func GetAllSSHs() ([]SSH, error) {
 }
 
 /// GetSShByID...
-func GetSShByID(id string) *SSH {
+func GetSShByID(id string) (*SSH, error) {
 	ssh := SSH{}
 	res := db.Get().QueryRow(getSSH, id)
-	if res != nil {
-		return nil
+	if res == nil {
+		return nil, nil
 	}
-	err:= res.Scan(ssh.Username, ssh.Key)
+	err:= res.Scan(&ssh.Username, &ssh.Key)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return &ssh
+	return &ssh, nil
 }
 
 // DeleteSSH ...
@@ -64,6 +65,27 @@ func DeleteSSH(id string) error {
 		return err
 	}
 	return nil
+}
+
+// UpdateSSH ...
+func (ssh *SSH) UpdateSSH(id string) (*SSH, error) {
+	//requestID, _ := strconv.Atoi(c.Param("id"))
+	//if err := c.Bind(updatedSoftware); err != nil {
+	//	return err
+	//}
+	stmt, err := db.Get().Prepare(updateSSH)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	res, err2 := stmt.Exec(ssh.Username, ssh.Key, id)
+	if err2 != nil {
+		fmt.Println(err2)
+		return nil, err2
+	}
+	res.LastInsertId()
+
+	return ssh, nil
 }
 
 
@@ -81,4 +103,8 @@ SELECT username, key FROM ssh
 
 const createSSH = `
 INSERT INTO ssh(username, password, key) VALUES(?, ?, ?)
+`
+
+const updateSSH = `
+UPDATE ssh SET username = ?, key = ? WHERE id = ?
 `

@@ -7,8 +7,13 @@ import (
 
 // Server ...
 type Server struct {
-	IP       int        `json:"id"`
-	Os       string     `json:"os"`
-	Software []software.Software `json:"software"`
-	SSH      []ssh.SSH      `json:"ssh"`
+	IP       int               `json:"id"`
+	OS       string            `json:"os"`
+	Software software.Software `json:"software"`
+	SSH      ssh.SSH           `json:"ssh"`
+}
+
+func NewServer() *Server {
+	server := &Server{}
+	return server
 }
