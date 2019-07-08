@@ -32,7 +32,10 @@ func GetAllServers() ([]Server, error) {
 	}
 	for res.Next() {
 		s := Server{}
-		res.Scan(&s.IP, &s.OS, &s.Software, s.SSH)
+		err := res.Scan(&s.IP, &s.OS)
+		if err != nil {
+			return nil, err
+		}
 		se = append(se, s)
 	}
 	return se, nil
@@ -45,7 +48,7 @@ func GetServerByID(id string) (*Server, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err := res.Scan(&s.IP, &s.OS, &s.Software, &s.SSH)
+	err := res.Scan(&s.IP, &s.OS)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +76,7 @@ func (se *Server) UpdateServer(id string) (*Server, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	res, err2 := stmt.Exec(&se.IP, &se.OS, &se.Software, &se.SSH, id)
+	res, err2 := stmt.Exec(&se.IP, &se.OS, id)
 	if err2 != nil {
 		fmt.Println(err2)
 		return nil, err2
@@ -88,18 +91,18 @@ DELETE FROM server WHERE id = ?
 `
 
 const getServer = `
-SELECT ip, os, software, ssh FROM server WHERE id = ?
+SELECT ip, os FROM server WHERE id = ?
 `
 
 const getAllServers = `
-SELECT id, ip, os, software, ssh FROM server
+SELECT id, ip, os FROM server
 `
 
 
 const createServer = `
-INSERT INTO server(ip, os, software, ssh) VALUES(?, ?, ?, ?)
+INSERT INTO server(ip, os) VALUES(?, ?)
 `
 
 const updateServer = `
-UPDATE server SET ip = ?, os = ?, software = ?, ssh = ? WHERE id = ?
+UPDATE server SET ip = ?, os = ? WHERE id = ?
 `
