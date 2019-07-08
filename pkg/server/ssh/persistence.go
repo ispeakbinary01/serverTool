@@ -12,7 +12,7 @@ func (ssh *SSH) CreateSSH() (int, error) {
 		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(ssh.Username, ssh.Key)
+	res, err := stmt.Exec(ssh.Username, ssh.Key, ssh.Password, ssh.ServerID)
 	if err != nil {
 		return 0, err
 	}
@@ -29,7 +29,7 @@ func GetAllSSHs() ([]SSH, error) {
 	res, err := db.Get().Query(getSSHs)
 	for res.Next() {
 		ssh := SSH{}
-		res.Scan(&ssh.Username, &ssh.Key)
+		res.Scan(&ssh.Username, &ssh.Key, &ssh.ServerID)
 		sshs = append(sshs, ssh)
 		// fmt.Printf("%v+\n")
 	}
@@ -46,7 +46,7 @@ func GetSShByID(id string) (*SSH, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err:= res.Scan(&ssh.Username, &ssh.Key)
+	err:= res.Scan(&ssh.Username, &ssh.Key, &ssh.ServerID)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (ssh *SSH) UpdateSSH(id string) (*SSH, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	res, err2 := stmt.Exec(ssh.Username, ssh.Key, id)
+	res, err2 := stmt.Exec(ssh.Username, ssh.Key, ssh.ServerID, id)
 	if err2 != nil {
 		fmt.Println(err2)
 		return nil, err2
@@ -94,17 +94,17 @@ DELETE FROM ssh WHERE id = ?
 `
 
 const getSSH = `
-SELECT username, key FROM ssh WHERE id = ?
+SELECT username, key, server_id FROM ssh WHERE id = ?
 `
 
 const getSSHs = `
-SELECT username, key FROM ssh
+SELECT username, key, server_id FROM ssh
 `
 
 const createSSH = `
-INSERT INTO ssh(username, password, key) VALUES(?, ?, ?)
+INSERT INTO ssh(username, password, key, server_id) VALUES(?, ?, ?, ?)
 `
 
 const updateSSH = `
-UPDATE ssh SET username = ?, key = ? WHERE id = ?
+UPDATE ssh SET username = ?, key = ?, server_id = ? WHERE id = ?
 `

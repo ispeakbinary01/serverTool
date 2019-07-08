@@ -6,6 +6,7 @@ type SSH struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Key      int    `json:"key"`
+	ServerID int `json:"server_id"`
 }
 
 // NewSSH ...

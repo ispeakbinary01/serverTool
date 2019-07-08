@@ -12,7 +12,7 @@ func (s *Software) CreateSoftware() (int, error) {
 		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(s.Name, s.Version)
+	res, err := stmt.Exec(s.Name, s.Version, s.ServerID)
 	if err != nil {
 		return 0, err
 	}
@@ -29,7 +29,7 @@ func GetAllSoftware() ([]Software, error) {
 	res, err := db.Get().Query(getAllSoftware)
 	for res.Next() {
 		s := Software{}
-		res.Scan(&s.Name, &s.Version)
+		res.Scan(&s.Name, &s.Version, &s.ServerID)
 		sw = append(sw, s)
 		// fmt.Printf("%v+\n")
 	}
@@ -46,7 +46,7 @@ func GetSoftwareByID(id string) (*Software, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err := res.Scan(&s.Name, &s.Version)
+	err := res.Scan(&s.Name, &s.Version, &s.ServerID)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (sw *Software) UpdateSoftware(id string) (*Software, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	res, err2 := stmt.Exec(&sw.Name, &sw.Version, id)
+	res, err2 := stmt.Exec(&sw.Name, &sw.Version, &sw.ServerID, id)
 	if err2 != nil {
 		fmt.Println(err2)
 		return nil, err2
@@ -93,19 +93,19 @@ DELETE FROM software WHERE id = ?
 `
 
 const getSoftware = `
-SELECT name, version FROM software WHERE id = ?
+SELECT name, version, server_id FROM software WHERE id = ?
 `
 
 const getAllSoftware = `
-SELECT id, name, version FROM software
+SELECT id, name, version, server_id FROM software
 `
 
 
 const createSoftware = `
-INSERT INTO software(name, version) VALUES(?, ?)
+INSERT INTO software(name, version, server_id) VALUES(?, ?, ?)
 `
 
 const updateSoftware = `
-UPDATE software SET name = ?, version = ? WHERE id = ?
+UPDATE software SET name = ?, version = ?, server_id = ? WHERE id = ?
 `
 

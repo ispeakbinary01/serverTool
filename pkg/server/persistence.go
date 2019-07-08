@@ -3,6 +3,8 @@ package server
 import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
+	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
+	_ "github.com/ispeakbinary01/serverTool/pkg/server/ssh"
 )
 
 // CreateServer ...
@@ -12,7 +14,7 @@ func (s *Server) CreateServer() (int, error) {
 		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(s.IP, s.OS, s.Software, s.SSH)
+	res, err := stmt.Exec(s.IP, s.OS)
 	if err != nil {
 		return 0, err
 	}
@@ -70,20 +72,32 @@ func DeleteServer(id string) error {
 }
 
 // UpdateServer ...
-func (se *Server) UpdateServer(id string) (*Server, error) {
+func (s *Server) UpdateServer(id string) (*Server, error) {
 	stmt, err := db.Get().Prepare(updateServer)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
-	res, err2 := stmt.Exec(&se.IP, &se.OS, id)
+	res, err2 := stmt.Exec(&s.IP, &s.OS, id)
 	if err2 != nil {
 		fmt.Println(err2)
 		return nil, err2
 	}
 	res.LastInsertId()
 
-	return se, nil
+	return s, nil
+}
+
+// GetServerSSH
+func (s *ssh.SSH.SSH) GetServerSSH(server_id int) (*ssh.SSH, error) {
+	res := db.Get().QueryRow(getServerSSH, server_id)
+	if res == nil {
+		return nil, nil
+	}
+	err := res.Scan(&s., &s.OS)
+	if err != nil {
+		return nil, err
+	}
 }
 
 const deleteServer = `
@@ -105,4 +119,8 @@ INSERT INTO server(ip, os) VALUES(?, ?)
 
 const updateServer = `
 UPDATE server SET ip = ?, os = ? WHERE id = ?
+`
+
+const getServerSSH = `
+SELECT username, key FROM ssh WHERE server_id = ?
 `

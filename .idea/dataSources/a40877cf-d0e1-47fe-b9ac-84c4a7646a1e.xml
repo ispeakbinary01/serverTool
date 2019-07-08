@@ -38,229 +38,207 @@
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="16" parent="6" name="software">
-      <Position>4</Position>
-      <DataType>TEXT|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="17" parent="6" name="ssh">
-      <Position>5</Position>
-      <DataType>TEXT|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <index id="18" parent="6" name="sqlite_autoindex_server_1">
+    <index id="16" parent="6" name="sqlite_autoindex_server_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="19" parent="6" name="sqlite_autoindex_server_2">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>ssh</ColNames>
-      <ColumnCollations></ColumnCollations>
-      <Unique>1</Unique>
-    </index>
-    <key id="20" parent="6">
+    <key id="17" parent="6">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_server_1</UnderlyingIndexName>
     </key>
-    <key id="21" parent="6">
+    <key id="18" parent="6">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_server_1</UnderlyingIndexName>
     </key>
-    <key id="22" parent="6">
-      <ColNames>ssh</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_server_2</UnderlyingIndexName>
-    </key>
-    <column id="23" parent="7" name="id">
+    <column id="19" parent="7" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="24" parent="7" name="user_id">
+    <column id="20" parent="7" name="user_id">
       <Position>2</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="25" parent="7" name="server_id">
+    <column id="21" parent="7" name="server_id">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="26" parent="7" name="sqlite_autoindex_server_user_rel_1">
+    <index id="22" parent="7" name="sqlite_autoindex_server_user_rel_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="27" parent="7" name="sqlite_autoindex_server_user_rel_2">
+    <index id="23" parent="7" name="sqlite_autoindex_server_user_rel_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>user_id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="28" parent="7" name="sqlite_autoindex_server_user_rel_3">
+    <index id="24" parent="7" name="sqlite_autoindex_server_user_rel_3">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>server_id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="29" parent="7">
+    <key id="25" parent="7">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_server_user_rel_1</UnderlyingIndexName>
     </key>
-    <key id="30" parent="7">
+    <key id="26" parent="7">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_server_user_rel_1</UnderlyingIndexName>
     </key>
-    <key id="31" parent="7">
+    <key id="27" parent="7">
       <ColNames>user_id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_server_user_rel_2</UnderlyingIndexName>
     </key>
-    <key id="32" parent="7">
+    <key id="28" parent="7">
       <ColNames>server_id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_server_user_rel_3</UnderlyingIndexName>
     </key>
-    <column id="33" parent="8" name="id">
+    <column id="29" parent="8" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="34" parent="8" name="name">
+    <column id="30" parent="8" name="name">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="35" parent="8" name="version">
+    <column id="31" parent="8" name="version">
       <Position>3</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="36" parent="8">
+    <column id="32" parent="8" name="server_id">
+      <Position>4</Position>
+      <DataType>INTEGER|0s</DataType>
+    </column>
+    <key id="33" parent="8">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="37" parent="9" name="type">
+    <column id="34" parent="9" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="38" parent="9" name="name">
+    <column id="35" parent="9" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="39" parent="9" name="tbl_name">
+    <column id="36" parent="9" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="40" parent="9" name="rootpage">
+    <column id="37" parent="9" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="41" parent="9" name="sql">
+    <column id="38" parent="9" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="42" parent="10" name="name">
+    <column id="39" parent="10" name="name">
       <Position>1</Position>
     </column>
-    <column id="43" parent="10" name="seq">
+    <column id="40" parent="10" name="seq">
       <Position>2</Position>
     </column>
-    <column id="44" parent="11" name="id">
+    <column id="41" parent="11" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="45" parent="11" name="username">
+    <column id="42" parent="11" name="username">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="46" parent="11" name="password">
+    <column id="43" parent="11" name="password">
       <Position>3</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="47" parent="11" name="key">
+    <column id="44" parent="11" name="key">
       <Position>4</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="48" parent="11" name="sqlite_autoindex_ssh_1">
+    <column id="45" parent="11" name="server_id">
+      <Position>5</Position>
+      <DataType>INTEGER|0s</DataType>
+    </column>
+    <index id="46" parent="11" name="sqlite_autoindex_ssh_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="49" parent="11" name="sqlite_autoindex_ssh_2">
+    <index id="47" parent="11" name="sqlite_autoindex_ssh_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>username</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <key id="50" parent="11">
+    <key id="48" parent="11">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_ssh_1</UnderlyingIndexName>
     </key>
-    <key id="51" parent="11">
+    <key id="49" parent="11">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_ssh_1</UnderlyingIndexName>
     </key>
-    <key id="52" parent="11">
+    <key id="50" parent="11">
       <ColNames>username</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_ssh_2</UnderlyingIndexName>
     </key>
-    <column id="53" parent="12" name="id">
+    <column id="51" parent="12" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="54" parent="12" name="username">
+    <column id="52" parent="12" name="username">
       <Position>2</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="55" parent="12" name="email">
+    <column id="53" parent="12" name="email">
       <Position>3</Position>
       <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="56" parent="12" name="password">
+    <column id="54" parent="12" name="password">
       <Position>4</Position>
-      <DataType>INTEGER|0s</DataType>
+      <DataType>TEXT|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="57" parent="12" name="sqlite_autoindex_user_1">
+    <index id="55" parent="12" name="sqlite_autoindex_user_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="58" parent="12" name="sqlite_autoindex_user_2">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>email</ColNames>
-      <ColumnCollations></ColumnCollations>
-      <Unique>1</Unique>
-    </index>
-    <key id="59" parent="12">
+    <key id="56" parent="12">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex_user_1</UnderlyingIndexName>
     </key>
-    <key id="60" parent="12">
+    <key id="57" parent="12">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_user_1</UnderlyingIndexName>
-    </key>
-    <key id="61" parent="12">
-      <ColNames>email</ColNames>
-      <UnderlyingIndexName>sqlite_autoindex_user_2</UnderlyingIndexName>
     </key>
   </database-model>
 </dataSource>
