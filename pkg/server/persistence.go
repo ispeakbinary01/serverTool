@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
 	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
-	_ "github.com/ispeakbinary01/serverTool/pkg/server/ssh"
+	"log"
+	"strconv"
 )
 
 // CreateServer ...
@@ -88,16 +89,70 @@ func (s *Server) UpdateServer(id string) (*Server, error) {
 	return s, nil
 }
 
+//func GetAllServers() ([]Server, error) {
+//	se := []Server{}
+//	res, err := db.Get().Query(getAllServers)
+//	if err != nil {
+//		return nil, err
+//	}
+//	for res.Next() {
+//		s := Server{}
+//		err := res.Scan(&s.IP, &s.OS)
+//		if err != nil {
+//			return nil, err
+//		}
+//		se = append(se, s)
+//	}
+//	return se, nil
+//}
+
 // GetServerSSH
-func (s *ssh.SSH.SSH) GetServerSSH(server_id int) (*ssh.SSH, error) {
-	res := db.Get().QueryRow(getServerSSH, server_id)
-	if res == nil {
-		return nil, nil
-	}
-	err := res.Scan(&s., &s.OS)
+func GetServerSSH(serverId string) ([]ssh.SSH, error) {
+	//s := []ssh.SSH{}
+	//stmt, err := db.Get().Qu(getServerSSH)
+	//fmt.Println(err)
+	//if err != nil {
+	//	return err
+	//}
+	//conv, err := strconv.Atoi(serverId)
+	//rows, err := stmt.Query(conv)
+	//log.Println(err)
+	//if err != nil {
+	//	return err
+	//}
+	//for rows.Next() {
+	//	ssh := ssh.SSH{}
+	//	err := rows.Scan(&ssh.Username, &ssh.Key)
+	//	log.Println(err)
+	//	if err != nil {
+	//		return err
+	//	}
+	//	s = append(s, ssh)
+	//}
+	//fmt.Println(err)
+	//return nil
+	s := []ssh.SSH{}
+	id, err := strconv.Atoi(serverId)
 	if err != nil {
+		log.Printf("String conversion failed:  %s\n", err.Error())
 		return nil, err
 	}
+	stmt, err := db.Get().Query(getServerSSH, id)
+	if err != nil {
+		log.Printf("Query failed:  %s\n", err.Error())
+		return nil, err
+	}
+	for stmt.Next() {
+		ssh := ssh.SSH{}
+		err := stmt.Scan(&ssh.Username, &ssh.Key)
+		log.Println(err)
+		if err != nil {
+			return nil, err
+		}
+		s = append(s, ssh)
+	}
+
+	return s, nil
 }
 
 const deleteServer = `

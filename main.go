@@ -25,6 +25,7 @@ func main() {
 	api.PUT("users/:id", handlers.UpdateUser)
 	api.DELETE("/users/:id", handlers.DeleteUser)
 	api.POST("/inventories/servers", handlers.PostServer)
+	api.GET("/inventories/serversSSH/:id", handlers.GetServerSSH)
 
 	api.Start(":8080")
 

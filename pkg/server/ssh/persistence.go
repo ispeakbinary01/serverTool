@@ -12,7 +12,7 @@ func (ssh *SSH) CreateSSH() (int, error) {
 		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(ssh.Username, ssh.Key, ssh.Password, ssh.ServerID)
+	res, err := stmt.Exec(ssh.Username, ssh.Password, ssh.Key, ssh.ServerID)
 	if err != nil {
 		return 0, err
 	}
@@ -60,10 +60,11 @@ func DeleteSSH(id string) error {
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(id)
+	 res, err := stmt.Query(id)
 	if err != nil {
 		return err
 	}
+	 res.Next()
 	return nil
 }
 
