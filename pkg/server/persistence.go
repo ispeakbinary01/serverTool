@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
+	"github.com/ispeakbinary01/serverTool/pkg/server/software"
 	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
 	"log"
 	"strconv"
@@ -108,29 +109,6 @@ func (s *Server) UpdateServer(id string) (*Server, error) {
 
 // GetServerSSH
 func GetServerSSH(serverId string) ([]ssh.SSH, error) {
-	//s := []ssh.SSH{}
-	//stmt, err := db.Get().Qu(getServerSSH)
-	//fmt.Println(err)
-	//if err != nil {
-	//	return err
-	//}
-	//conv, err := strconv.Atoi(serverId)
-	//rows, err := stmt.Query(conv)
-	//log.Println(err)
-	//if err != nil {
-	//	return err
-	//}
-	//for rows.Next() {
-	//	ssh := ssh.SSH{}
-	//	err := rows.Scan(&ssh.Username, &ssh.Key)
-	//	log.Println(err)
-	//	if err != nil {
-	//		return err
-	//	}
-	//	s = append(s, ssh)
-	//}
-	//fmt.Println(err)
-	//return nil
 	s := []ssh.SSH{}
 	id, err := strconv.Atoi(serverId)
 	if err != nil {
@@ -145,14 +123,40 @@ func GetServerSSH(serverId string) ([]ssh.SSH, error) {
 	for stmt.Next() {
 		ssh := ssh.SSH{}
 		err := stmt.Scan(&ssh.Username, &ssh.Key)
-		log.Println(err)
 		if err != nil {
+			log.Println(err)
 			return nil, err
 		}
 		s = append(s, ssh)
 	}
 
 	return s, nil
+}
+
+// GetServerSoftware
+func GetserverSoftware(serverId string) ([]software.Software, error) {
+	sw := []software.Software{}
+	id, err := strconv.Atoi(serverId)
+	if err != nil {
+		log.Printf("String conversion failed %s \n", err.Error())
+		return nil, err
+	}
+	stmt, err := db.Get().Query(getServerSoftware, id)
+	if err != nil {
+		log.Printf("Query failed: %s \n", err.Error())
+		return nil, err
+	}
+	for stmt.Next() {
+		s := software.Software{}
+		err := stmt.Scan(&s.Name, &s.Version)
+		if err != nil {
+			log.Printf("Filling up array failed %s \n", err.Error())
+			return nil, err
+		}
+		sw = append(sw, s)
+	}
+
+	return sw, nil
 }
 
 const deleteServer = `
@@ -178,4 +182,8 @@ UPDATE server SET ip = ?, os = ? WHERE id = ?
 
 const getServerSSH = `
 SELECT username, key FROM ssh WHERE server_id = ?
+`
+
+const getServerSoftware = `
+SELECT name, version FROM software WHERE server_id = ?
 `

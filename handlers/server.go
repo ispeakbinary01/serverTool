@@ -32,4 +32,15 @@ func GetServerSSH(c echo.Context) error {
 	return c.JSON(200, response)
 }
 
+// GetServerSoftware ...
+func GetServerSoftware(c echo.Context) error {
+	requestID := c.Param("id")
+	response, err := server.GetserverSoftware(requestID)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(200, response)
+}
+
 
