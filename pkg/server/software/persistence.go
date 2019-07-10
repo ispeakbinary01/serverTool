@@ -1,6 +1,7 @@
 package software
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
 )
@@ -22,14 +23,13 @@ func (s *Software) CreateSoftware() (int, error) {
 	}
 	return int(r), nil
 }
-
 // GetAllSoftware ...
 func GetAllSoftware() ([]Software, error) {
 	sw := []Software{}
 	res, err := db.Get().Query(getAllSoftware)
 	for res.Next() {
 		s := Software{}
-		res.Scan(&s.Name, &s.Version, &s.ServerID)
+		res.Scan(&s.ID, &s.Name, &s.Version, &s.ServerID)
 		sw = append(sw, s)
 		// fmt.Printf("%v+\n")
 	}
@@ -46,7 +46,7 @@ func GetSoftwareByID(id string) (*Software, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err := res.Scan(&s.Name, &s.Version, &s.ServerID)
+	err := res.Scan(&s.ID, &s.Name, &s.Version, &s.ServerID)
 	if err != nil {
 		return nil, err
 	}
@@ -55,16 +55,16 @@ func GetSoftwareByID(id string) (*Software, error) {
 }
 
 // DeleteSoftware ...
-func DeleteSoftware(id string) error {
+func DeleteSoftware(id string) (sql.Result, error) {
 	stmt, err := db.Get().Prepare(deleteSoftware)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = stmt.Exec(id)
+	result, err := stmt.Exec(id)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return result, nil
 }
 
 // UpdateSoftware ...
@@ -93,7 +93,7 @@ DELETE FROM software WHERE id = ?
 `
 
 const getSoftware = `
-SELECT name, version, server_id FROM software WHERE id = ?
+SELECT id, name, version, server_id FROM software WHERE id = ?
 `
 
 const getAllSoftware = `

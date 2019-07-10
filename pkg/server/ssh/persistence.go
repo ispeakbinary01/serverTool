@@ -29,7 +29,7 @@ func GetAllSSHs() ([]SSH, error) {
 	res, err := db.Get().Query(getSSHs)
 	for res.Next() {
 		ssh := SSH{}
-		res.Scan(&ssh.Username, &ssh.Key, &ssh.ServerID)
+		res.Scan(&ssh.ID, &ssh.Username, &ssh.Key, &ssh.ServerID)
 		sshs = append(sshs, ssh)
 		// fmt.Printf("%v+\n")
 	}
@@ -99,7 +99,7 @@ SELECT username, key, server_id FROM ssh WHERE id = ?
 `
 
 const getSSHs = `
-SELECT username, key, server_id FROM ssh
+SELECT id, username, key, server_id FROM ssh
 `
 
 const createSSH = `

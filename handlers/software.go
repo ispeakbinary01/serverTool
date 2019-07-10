@@ -60,7 +60,10 @@ func GetSoftwareByID(c echo.Context) error {
 // DeleteSoftware ...
 func DeleteSoftware(c echo.Context) error {
 	requestID := c.Param("id")
-	s := software.DeleteSoftware(requestID)
+	s, err := software.DeleteSoftware(requestID)
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(200, s)
 }
