@@ -5,6 +5,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+
+
 // PostUser ...
 func PostUser(c echo.Context) error {
 	u := user.NewUser()
@@ -16,6 +18,7 @@ func PostUser(c echo.Context) error {
 		return err
 	}
 	u.ID = uid
+
 	return c.JSON(201, u)
 }
 

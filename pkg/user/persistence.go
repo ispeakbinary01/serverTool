@@ -3,7 +3,15 @@ package user
 import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
+	"golang.org/x/crypto/bcrypt"
+	"log"
 )
+
+// hashPassword
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
 
 // CreateUser ...
 func (u *User) CreateUser() (int, error) {
@@ -11,8 +19,12 @@ func (u *User) CreateUser() (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	hash, err := hashPassword(u.Password)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer stmt.Close()
-	res, err := stmt.Exec(u.Username, u.Email, u.Password)
+	res, err := stmt.Exec(u.Username, u.Email, hash, u.Position)
 	if err != nil {
 		return 0, err
 	}
@@ -29,7 +41,7 @@ func GetAllUsers() ([]User, error) {
 	res, err := db.Get().Query(getUsers)
 	for res.Next() {
 		u := User{}
-		res.Scan(&u.Username, &u.Email)
+		res.Scan(&u.Username, &u.Email, &u.Position)
 		us = append(us, u)
 		// fmt.Printf("%v+\n")
 	}
@@ -46,7 +58,7 @@ func GetUserByID(id string) (*User, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err:= res.Scan(&u.Username, &u.Email)
+	err:= res.Scan(&u.Username, &u.Email, &u.Position)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +96,7 @@ func (u *User) UpdateUser(id string) (*User, error) {
 			fmt.Println(err)
 			return nil, err
 		}
-		res, err2 := stmt.Exec(&u.Username, &u.Email, id)
+		res, err2 := stmt.Exec(&u.Username, &u.Email, &u.Position, id)
 		if err2 != nil {
 			fmt.Println(err2)
 			return nil, err2
@@ -99,18 +111,18 @@ DELETE FROM user WHERE id = ?
 `
 
 const getUser = `
-SELECT username, email FROM user WHERE id = ?
+SELECT username, email, position FROM user WHERE id = ?
 `
 
 const getUsers = `
-SELECT username, email FROM user
+SELECT username, email, position FROM user
 `
 
 
 const createUser = `
-INSERT INTO user (username, email, password) VALUES (?, ?, ?)
+INSERT INTO user (username, email, password, position) VALUES (?, ?, ?, ?)
 `
 
 const updateUser = `
-UPDATE user SET username = ?, email = ? WHERE id = ?
+UPDATE user SET username = ?, email = ?, position = ? WHERE id = ?
 `
