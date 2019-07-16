@@ -4,14 +4,13 @@ import (
 	"github.com/ispeakbinary01/serverTool/handlers"
 	"github.com/ispeakbinary01/serverTool/middlewares"
 	"github.com/labstack/echo/v4"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
 	api := echo.New()
 	api.POST("/signin", handlers.Signin)
 	api.POST("/inventories/software", handlers.PostSoftware, middlewares.IsLoggedIn)                          // Works
-	api.GET("/inventories/software", handlers.GetAllSoftware, middlewares.IsLoggedIn) // Works
+	api.GET("/inventories/software", handlers.GetAllSoftware, middlewares.IsLoggedIn) 						// Works
 	api.GET("/inventories/software/:id", handlers.GetSoftwareByID, middlewares.IsLoggedIn)                    // Works
 	api.DELETE("/inventories/software/:id", handlers.DeleteSoftware, middlewares.IsLoggedIn)                  // Works but returns Locker{}
 	api.PUT("/inventories/software/:id", handlers.UpdateSoftware, middlewares.IsLoggedIn)                     // Works
