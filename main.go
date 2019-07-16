@@ -8,7 +8,7 @@ import (
 
 func main() {
 	api := echo.New()
-	// api.POST("/signin", handlers.Signin)
+	api.POST("/signin", handlers.Signin)
 	api.POST("/inventories/software", handlers.PostSoftware) // Works
 	api.GET("/inventories/software", handlers.GetAllSoftware) // Works
 	api.GET("/inventories/software/:id", handlers.GetSoftwareByID) // Works
