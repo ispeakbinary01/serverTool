@@ -31,18 +31,18 @@ func Signin(c echo.Context) error {
 	if stmt == nil {
 		log.Printf("User with email %s was not found. \n", u.Email)
 	}
-	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Password, &scanned.Position)
+	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Username, &scanned.Password, &scanned.Position)
 	if err2 != nil {
 		log.Fatal(err)
 	}
 	if checkHash(u.Password, scanned.Password) {
 		fmt.Printf("Welcome %s \n", scanned.Username)
-		token := jwt.New(jwt.SigningMethodHS256)
 
+		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
 		claims["email"] = scanned.Email
 		claims["id"] = scanned.ID
-		claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
+		claims["exp"] = time.Now().Add(time.Minute * 60).Unix()
 
 		t, err := token.SignedString([]byte("secret"))
 		if err != nil {
@@ -59,7 +59,6 @@ func Signin(c echo.Context) error {
 }
 
 
-
 const userCheck = `
-SELECT id, email, password, position FROM user WHERE email = ?
+SELECT id, email, username, password, position FROM user WHERE email = ?
 `

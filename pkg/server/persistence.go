@@ -96,23 +96,6 @@ func (s *Server) UpdateServer(id string) (*Server, error) {
 	return s, nil
 }
 
-//func GetAllServers() ([]Server, error) {
-//	se := []Server{}
-//	res, err := db.Get().Query(getAllServers)
-//	if err != nil {
-//		return nil, err
-//	}
-//	for res.Next() {
-//		s := Server{}
-//		err := res.Scan(&s.IP, &s.OS)
-//		if err != nil {
-//			return nil, err
-//		}
-//		se = append(se, s)
-//	}
-//	return se, nil
-//}
-
 // GetServerSSH
 func GetServerSSH(serverId string) ([]ssh.SSH, error) {
 	s := []ssh.SSH{}
