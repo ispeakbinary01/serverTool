@@ -1,6 +1,10 @@
 package db
 
-import "database/sql"
+import (
+	_ "github.com/mattn/go-sqlite3"
+	"database/sql"
+	"log"
+)
 
 var db *sql.DB
 
@@ -10,7 +14,7 @@ func Get() *sql.DB {
 		var err error
 		db, err = sql.Open("sqlite3", "./serverInventory.db")
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}
 

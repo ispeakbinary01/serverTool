@@ -187,6 +187,6 @@ const getServerSoftware = `
 SELECT name, version FROM software WHERE server_id = ?
 `
 
-//const userServerRel = `
-//INSERT INTO server_user_rel server(id), user(id) VALUES(?, ?)
-//`
+const userServerRel = `
+INSERT INTO server_user_rel server(id), user(id) VALUES(?, ?)
+`

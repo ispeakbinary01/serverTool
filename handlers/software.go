@@ -6,22 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// PutHelper ...
-//func PutHelper(id int) bool {
-//	var count int
-//
-//	row := db.Get().QueryRow("SELECT COUNT(*) FROM software")
-//	err := row.Scan(&count)
-//	if err != nil {
-//		panic(err)
-//	}
-//	if id < count {
-//		return true
-//	}
-//
-//	return false
-//}
-
 // PostSoftware ...
 func PostSoftware(c echo.Context) error {
 	s := software.NewSoftware()

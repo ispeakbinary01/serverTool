@@ -8,25 +8,27 @@ import (
 
 func main() {
 	api := echo.New()
+	api.Use(middlewares.IsLoggedIn)
 	api.POST("/signin", handlers.Signin)
-	api.POST("/inventories/software", handlers.PostSoftware, middlewares.IsLoggedIn)                          // Works
-	api.GET("/inventories/software", handlers.GetAllSoftware, middlewares.IsLoggedIn) 						// Works
-	api.GET("/inventories/software/:id", handlers.GetSoftwareByID, middlewares.IsLoggedIn)                    // Works
-	api.DELETE("/inventories/software/:id", handlers.DeleteSoftware, middlewares.IsLoggedIn)                  // Works but returns Locker{}
-	api.PUT("/inventories/software/:id", handlers.UpdateSoftware, middlewares.IsLoggedIn)                     // Works
-	api.POST("/inventories/ssh", handlers.PostSSH, middlewares.IsLoggedIn)                                    // Works
-	api.GET("/inventories/ssh", handlers.GetSSHs, middlewares.IsLoggedIn)                                     // Works
-	api.GET("/inventories/ssh/:id", handlers.GetSSH, middlewares.IsLoggedIn)                                  // Works
-	api.DELETE("/inventories/ssh/:id", handlers.DeleteSSH, middlewares.IsLoggedIn)                            // Works but returns null
-	api.PUT("/inventories/ssh/:id", handlers.UpdateSSH, middlewares.IsLoggedIn)                               // Works
-	api.POST("/users", handlers.PostUser)                                             						// Works
-	api.GET("/users", handlers.GetUsers, middlewares.IsLoggedIn)                                              // Works
-	api.GET("/users/:id", handlers.GetUser, middlewares.IsLoggedIn)                                           // Works
-	api.PUT("users/:id", handlers.UpdateUser, middlewares.IsLoggedIn)                                         // Works
-	api.DELETE("/users/:id", handlers.DeleteUser, middlewares.IsLoggedIn)                                     // Works but returns null
-	api.POST("/inventories/servers", handlers.PostServer, middlewares.IsLoggedIn)                             // Works
-	api.GET("/inventories/serversSSH/:id", handlers.GetServerSSH, middlewares.IsLoggedIn)                     // Works
-	api.GET("/inventories/serversSoftware/:id", handlers.GetServerSoftware, middlewares.IsLoggedIn)           // Works
+	api.POST("/inventories/software", handlers.PostSoftware)                          // Works
+	api.GET("/inventories/software", handlers.GetAllSoftware) 						// Works
+	api.GET("/inventories/software/:id", handlers.GetSoftwareByID)                    // Works
+	api.DELETE("/inventories/software/:id", handlers.DeleteSoftware)                  // Works but returns Locker{}
+	api.PUT("/inventories/software/:id", handlers.UpdateSoftware)                     // Works
+	api.POST("/inventories/ssh", handlers.PostSSH)                                    // Works
+	api.GET("/inventories/ssh", handlers.GetSSHs)                                     // Works
+	api.GET("/inventories/ssh/:id", handlers.GetSSH)                                  // Works
+	api.DELETE("/inventories/ssh/:id", handlers.DeleteSSH)                            // Works but returns null
+	api.PUT("/inventories/ssh/:id", handlers.UpdateSSH)                               // Works
+	api.POST("/users", handlers.PostUser)                                             // Works
+	api.GET("/users", handlers.GetUsers)                                              // Works
+	api.GET("/users/:id", handlers.GetUser)                                           // Works
+	api.PUT("users/:id", handlers.UpdateUser)                                         // Works
+	api.DELETE("/users/:id", handlers.DeleteUser)                                     // Works but returns null
+	api.POST("/inventories/servers", handlers.PostServer)                             // Works
+	api.GET("/inventories/serversSSH/:id", handlers.GetServerSSH)                     // Works
+	api.GET("/inventories/serversSoftware/:id", handlers.GetServerSoftware)           // Works
+
 
 	api.Start(":8080")
 

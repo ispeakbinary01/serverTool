@@ -40,9 +40,9 @@ func Signin(c echo.Context) error {
 		token := jwt.New(jwt.SigningMethodHS256)
 
 		claims := token.Claims.(jwt.MapClaims)
-		claims["name"] = scanned.Username
+		claims["username"] = scanned.Username
 		claims["position"] = scanned.Position
-		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+		claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
 		t, err := token.SignedString([]byte("secret"))
 		if err != nil {
