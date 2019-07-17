@@ -27,11 +27,11 @@ func Signin(c echo.Context) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	stmt := db.Get().QueryRow(userCheck, u.Username)
+	stmt := db.Get().QueryRow(userCheck, u.Email)
 	if stmt == nil {
-		log.Printf("User with username %s was not found. \n", u.Username)
+		log.Printf("User with email %s was not found. \n", u.Email)
 	}
-	err2 := stmt.Scan(&scanned.Username, &scanned.Password, &scanned.Position)
+	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Password, &scanned.Position)
 	if err2 != nil {
 		log.Fatal(err)
 	}
@@ -40,8 +40,8 @@ func Signin(c echo.Context) error {
 		token := jwt.New(jwt.SigningMethodHS256)
 
 		claims := token.Claims.(jwt.MapClaims)
-		claims["username"] = scanned.Username
-		claims["position"] = scanned.Position
+		claims["email"] = scanned.Email
+		claims["id"] = scanned.ID
 		claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
 		t, err := token.SignedString([]byte("secret"))
@@ -53,7 +53,7 @@ func Signin(c echo.Context) error {
 			"token": t,
 		})
 	} else {
-		fmt.Printf("Wrong password for username %s \n", scanned.Username)
+		fmt.Printf("Wrong password for email %s \n", scanned.Email)
 		return echo.ErrUnauthorized
 	}
 }
@@ -61,5 +61,5 @@ func Signin(c echo.Context) error {
 
 
 const userCheck = `
-SELECT username, password, position FROM user WHERE username = ?
+SELECT id, email, password, position FROM user WHERE email = ?
 `

@@ -24,6 +24,12 @@ func (s *Server) CreateServer() (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	stmt2, err2 := db.Get().Prepare(userServerRel)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	defer stmt2.Close()
+	stmt2.Exec(r, )
 	return int(r), nil
 }
 
