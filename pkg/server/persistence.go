@@ -10,7 +10,7 @@ import (
 )
 
 // CreateServer ...
-func (s *Server) CreateServer() (int, error) {
+func (s *Server) CreateServer(uid interface{}) (int, error) {
 	stmt, err := db.Get().Prepare(createServer)
 	if err != nil {
 		return 0, err
@@ -24,12 +24,16 @@ func (s *Server) CreateServer() (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	stmt2, err2 := db.Get().Prepare(userServerRel)
+
+	stmt2, err := db.Get().Prepare(userServerRel)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt2.Close()
+	_, err2 := stmt2.Exec(r, uid)
 	if err2 != nil {
 		log.Fatal(err2)
 	}
-	defer stmt2.Close()
-	stmt2.Exec(r, )
 	return int(r), nil
 }
 
@@ -148,6 +152,10 @@ func GetserverSoftware(serverId string) ([]software.Software, error) {
 	return sw, nil
 }
 
+const userServerRel = `
+INSERT INTO server_user_rel (user_id, server_id) SELECT s.id = ? FROM server s INNER JOIN user u ON s.id = u.id = ?
+`
+
 const deleteServer = `
 DELETE FROM server WHERE id = ?
 `
@@ -176,6 +184,4 @@ const getServerSoftware = `
 SELECT name, version FROM software WHERE server_id = ?
 `
 
-const userServerRel = `
-INSERT INTO server_user_rel server(id), user(id) VALUES(?, ?)
-`
+
