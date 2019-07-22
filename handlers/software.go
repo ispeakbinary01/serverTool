@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/pkg/server/software"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 // PostSoftware ...
@@ -13,6 +14,10 @@ func PostSoftware(c echo.Context) error {
 		return err
 	}
 	swID, err := s.CreateSoftware()
+	valErr := s.Validate()
+	if valErr != nil {
+		return c.JSON(http.StatusBadRequest, valErr)
+	}
 	if err != nil {
 		return err
 	}

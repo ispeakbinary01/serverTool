@@ -1,16 +1,31 @@
 package ssh
 
+import (
+	"gopkg.in/go-playground/validator.v9"
+	"log"
+)
+
 // SSH ...
 type SSH struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Key      int    `json:"key"`
-	ServerID int `json:"server_id"`
+	ID       int    `json:"id"validate:"required"`
+	Username string `json:"username"validate:"required"`
+	Password string `json:"password"validate:"required"`
+	Key      int    `json:"key"validate:"required"`
+	ServerID int `json:"server_id"validate:"required"`
 }
 
 // NewSSH ...
 func NewSSH() *SSH {
 	SSH := &SSH{}
 	return SSH
+}
+
+func (ssh *SSH) Validate() error {
+	validate := validator.New()
+	err := validate.Struct(ssh)
+	if err != nil{
+		log.Printf("%s", err)
+		return err
+	}
+	return nil
 }

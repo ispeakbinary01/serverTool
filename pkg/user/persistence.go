@@ -101,7 +101,7 @@ func GetServersByUser(uid interface{}) ([]server.Server,error) {
 	}
 	for res.Next() {
 		sr := server.Server{}
-		res.Scan(&sr.IP, &sr.ID, &sr.OS)
+		res.Scan(&sr.ID, &sr.IP, &sr.OS)
 		servers = append(servers, sr)
 	}
 	return servers, nil

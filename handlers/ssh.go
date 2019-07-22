@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 // PostSSH ...
@@ -13,6 +14,10 @@ func PostSSH(c echo.Context) error {
 		return err
 	}
 	sshId, err := ssh.CreateSSH()
+	valErr := ssh.Validate()
+	if valErr != nil {
+		return c.JSON(http.StatusBadRequest, valErr)
+	}
 	if err != nil {
 		fmt.Print(err)
 		return err

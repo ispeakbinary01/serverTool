@@ -28,7 +28,7 @@ func main() {
 	api.POST("/inventories/servers", handlers.PostServer)                   // Works
 	api.GET("/inventories/serversSSH/:id", handlers.GetServerSSH)           // Works
 	api.GET("/inventories/serversSoftware/:id", handlers.GetServerSoftware) // Works
-	api.GET("/serversByUser", handlers.GetServersByUser)
+	api.GET("/serversByUser", handlers.GetServersByUser) 		// Works
 
 	api.Start(":8080")
 

@@ -4,7 +4,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ispeakbinary01/serverTool/pkg/user"
 	"github.com/labstack/echo/v4"
-	"log"
+	"net/http"
 )
 
 
@@ -18,8 +18,7 @@ func PostUser(c echo.Context) error {
 	uid, err := u.CreateUser()
 	valErr := u.Validate()
 	if valErr != nil {
-		log.Fatalf("%s", valErr)
-		return valErr
+		return c.JSON(http.StatusBadRequest, valErr)
 	}
 	if err != nil {
 		return err
@@ -79,7 +78,6 @@ func GetServersByUser(c echo.Context) error {
 	claims := u.Claims.(jwt.MapClaims)
 	response, err := user.GetServersByUser(claims["id"])
 	if err != nil {
-		log.Fatal(err)
 		return c.JSON(402, response)
 	}
 	return c.JSON(200, response)
