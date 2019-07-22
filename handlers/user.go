@@ -14,6 +14,7 @@ func PostUser(c echo.Context) error {
 		return err
 	}
 	uid, err := u.CreateUser()
+	u.Validate()
 	if err != nil {
 		return err
 	}

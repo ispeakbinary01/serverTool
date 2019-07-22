@@ -30,7 +30,7 @@ func (s *Server) CreateServer(uid interface{}) (int, error) {
 		log.Fatal(err)
 	}
 	defer stmt2.Close()
-	_, err2 := stmt2.Exec(r, uid)
+	_, err2 := stmt2.Exec(uid, r)
 	if err2 != nil {
 		log.Fatal(err2)
 	}
@@ -128,7 +128,7 @@ func GetServerSSH(serverId string) ([]ssh.SSH, error) {
 
 // GetServerSoftware
 func GetserverSoftware(serverId string) ([]software.Software, error) {
-	sw := []software.Software{}
+	var sw []software.Software
 	id, err := strconv.Atoi(serverId)
 	if err != nil {
 		log.Printf("String conversion failed %s \n", err.Error())
@@ -153,7 +153,7 @@ func GetserverSoftware(serverId string) ([]software.Software, error) {
 }
 
 const userServerRel = `
-INSERT INTO server_user_rel (user_id, server_id) SELECT s.id = ? FROM server s INNER JOIN user u ON s.id = u.id = ?
+INSERT INTO server_user_rel (user_id, server_id) VALUES (?, ?)
 `
 
 const deleteServer = `

@@ -2,7 +2,7 @@ package server
 
 // Server ...
 type Server struct {
-	IP int    `json:"ip"`
+	IP string    `json:"ip"`
 	OS string `json:"os"`
 }
 
