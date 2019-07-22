@@ -5,6 +5,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ispeakbinary01/serverTool/pkg/server"
 	"github.com/labstack/echo/v4"
+	"log"
 )
 
 
@@ -18,6 +19,11 @@ func PostServer(c echo.Context) error {
 		return err
 	}
 	seID, err := s.CreateServer(claims["id"])
+	valErr := s.Validate()
+	if valErr != nil {
+		log.Fatalf("%s", valErr)
+		return valErr
+	}
 	if err != nil {
 		fmt.Println(err)
 		return err

@@ -5,9 +5,9 @@ import "gopkg.in/go-playground/validator.v9"
 // User ...
 type User struct {
 	ID       int    `json:"id"`
-	Username string `json:"username" validate:"required,max=10,min=5"`
+	Username string `json:"username" validate:"required,max=20,min=5"`
 	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,max=20,min=6"`
+	Password string `json:"password" validate:"required,max=50,min=6"`
 	Position string `json:"position" validate:"required"`
 }
 

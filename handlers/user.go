@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/ispeakbinary01/serverTool/pkg/user"
 	"github.com/labstack/echo/v4"
+	"log"
 )
 
 
@@ -14,7 +15,11 @@ func PostUser(c echo.Context) error {
 		return err
 	}
 	uid, err := u.CreateUser()
-	u.Validate()
+	valErr := u.Validate()
+	if valErr != nil {
+		log.Fatalf("%s", valErr)
+		return valErr
+	}
 	if err != nil {
 		return err
 	}

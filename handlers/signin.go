@@ -31,7 +31,7 @@ func Signin(c echo.Context) error {
 	if stmt == nil {
 		log.Printf("User with email %s was not found. \n", u.Email)
 	}
-	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Username, &scanned.Password, &scanned.Position)
+	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Password, &scanned.Position)
 	if err2 != nil {
 		log.Fatal(err)
 	}
