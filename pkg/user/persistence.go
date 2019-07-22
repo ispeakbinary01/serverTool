@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
+	"github.com/ispeakbinary01/serverTool/pkg/server"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )
@@ -87,6 +88,25 @@ func DeleteUser(id string) error {
 	return nil
 }
 
+// GetServersByUser
+func GetServersByUser(uid interface{}) ([]server.Server,error) {
+	var servers []server.Server
+	stmt, err := db.Get().Prepare(serversByUser)
+	if err != nil {
+		return nil, err
+	}
+	res, err := stmt.Query(uid)
+	if err != nil {
+		return nil, err
+	}
+	for res.Next() {
+		sr := server.Server{}
+		res.Scan(&sr.ID, &sr.IP, &sr.OS)
+		servers = append(servers, sr)
+	}
+	return servers, nil
+}
+
 // UpdateUser ...
 func (u *User) UpdateUser(id string) (*User, error) {
 	//requestID, _ := strconv.Atoi(c.Param("id"))
@@ -107,6 +127,10 @@ func (u *User) UpdateUser(id string) (*User, error) {
 
 		return u, nil
 }
+
+const serversByUser = `
+SELECT server.id, server.ip, server.os FROM server INNER JOIN server_user_rel sur ON server.id = sur.server_id INNER JOIN user ON sur.user_id = user.id WHERE user.id = ?
+`
 
 const deleteUser = `
 DELETE FROM user WHERE id = ?

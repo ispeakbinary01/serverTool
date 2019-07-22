@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/dgrijalva/jwt-go"
 	"github.com/ispeakbinary01/serverTool/pkg/user"
 	"github.com/labstack/echo/v4"
 	"log"
@@ -70,5 +71,17 @@ func UpdateUser(c echo.Context) error {
 	}
 	return c.JSON(201, uid)
 
+}
+
+// GetServersByUser ...
+func GetServersByUser(c echo.Context) error {
+	u := c.Get("user").(*jwt.Token)
+	claims := u.Claims.(jwt.MapClaims)
+	response, err := user.GetServersByUser(claims["id"])
+	if err != nil {
+		log.Fatal(err)
+		return c.JSON(402, response)
+	}
+	return c.JSON(200, response)
 }
  

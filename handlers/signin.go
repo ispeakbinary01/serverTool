@@ -60,5 +60,5 @@ func Signin(c echo.Context) error {
 
 
 const userCheck = `
-SELECT id, email, username, password, position FROM user WHERE email = ?
+SELECT id, email, password, position FROM user WHERE email = ?
 `

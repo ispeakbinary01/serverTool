@@ -7,6 +7,7 @@ import (
 
 // Server ...
 type Server struct {
+	ID int `json:"id"`
 	IP string    `json:"ip"validate:"required"`
 	OS string `json:"os"validate:"required"`
 }
