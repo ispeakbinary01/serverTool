@@ -6,6 +6,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TODO: Fix Validation: works but still writes in database even if it the request is bad/wrong
+
 func main() {
 	api := echo.New()
 	api.Use(middlewares.IsLoggedIn)
@@ -28,7 +30,7 @@ func main() {
 	api.POST("/inventories/servers", handlers.PostServer)                   // Works
 	api.GET("/inventories/serversSSH/:id", handlers.GetServerSSH)           // Works
 	api.GET("/inventories/serversSoftware/:id", handlers.GetServerSoftware) // Works
-	api.GET("/serversByUser", handlers.GetServersByUser) 		// Works
+	api.GET("/serversByUser", handlers.GetServersByUser) 					// Works
 
 	api.Start(":8080")
 

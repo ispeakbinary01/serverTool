@@ -6,7 +6,7 @@ import "gopkg.in/go-playground/validator.v9"
 type Software struct {
 	ID      int    `json:"id"validate:"required"`
 	Name    string `json:"name"validate:"required"`
-	Version int    `json:"version"validate:"required"`
+	Version string    `json:"version"validate:"required"`
 	ServerID  int    `json:"server_id"validate:"required"`
 }
 

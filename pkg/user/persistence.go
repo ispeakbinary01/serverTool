@@ -28,7 +28,7 @@ func (u *User) CreateUser() (int, error) {
 		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(u.Email, hash, u.Position)
+	res, err := stmt.Exec(u.Email, hash, u.Role)
 	if err != nil {
 		log.Printf("%s", err.Error())
 		return 0, err
@@ -47,7 +47,7 @@ func GetAllUsers() ([]User, error) {
 	res, err := db.Get().Query(getUsers)
 	for res.Next() {
 		u := User{}
-		res.Scan(&u.Email, &u.Position)
+		res.Scan(&u.Email, &u.Role)
 		us = append(us, u)
 		// fmt.Printf("%v+\n")
 	}
@@ -65,7 +65,7 @@ func GetUserByID(id string) (*User, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err:= res.Scan(&u.Email, &u.Position)
+	err:= res.Scan(&u.Email, &u.Role)
 	if err != nil {
 		log.Printf("%s", err.Error())
 		return nil, err
@@ -126,7 +126,7 @@ func (u *User) UpdateUser(id string) (*User, error) {
 			log.Printf("%s", err.Error())
 			return nil, err
 		}
-		res, err2 := stmt.Exec(&u.Email, &u.Position, id)
+		res, err2 := stmt.Exec(&u.Email, &u.Role, id)
 		if err2 != nil {
 			log.Printf("%s", err2.Error())
 			return nil, err2
@@ -145,18 +145,18 @@ DELETE FROM users WHERE id = ?
 `
 
 const getUser = `
-SELECT email, position FROM users WHERE id = ?
+SELECT email, role FROM users WHERE id = ?
 `
 
 const getUsers = `
-SELECT email, position FROM users
+SELECT email, role FROM users
 `
 
 
 const createUser = `
-INSERT INTO users (email, password, position) VALUES (?, ?, ?)
+INSERT INTO users (email, password, role) VALUES (?, ?, ?)
 `
 
 const updateUser = `
-UPDATE users SET email = ?, position = ? WHERE id = ?
+UPDATE users SET email = ?, role = ? WHERE id = ?
 `

@@ -19,7 +19,7 @@ func PostSoftware(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 	s.ID = swID
 	return c.JSON(201, swID)

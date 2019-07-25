@@ -87,7 +87,7 @@ func (sw *Software) UpdateSoftware(id string) (*Software, error) {
 	}
 	res, err2 := stmt.Exec(&sw.Name, &sw.Version, &sw.ServerID, id)
 	if err2 != nil {
-		log.Printf("%s", err2.Error())
+		log.Printf("%s", err2)
 		return nil, err2
 	}
 	res.LastInsertId()
