@@ -19,23 +19,23 @@ func hashPassword(password string) (string, error) {
 func (u *User) CreateUser() (int, error) {
 	stmt, err := db.Get().Prepare(createUser)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	hash, err := hashPassword(u.Password)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	defer stmt.Close()
 	res, err := stmt.Exec(u.Email, hash, u.Role)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	return int(r), nil
@@ -52,7 +52,7 @@ func GetAllUsers() ([]User, error) {
 		// fmt.Printf("%v+\n")
 	}
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	return us, nil
@@ -67,7 +67,7 @@ func GetUserByID(id string) (*User, error) {
 	}
 	err:= res.Scan(&u.Email, &u.Role)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 
@@ -83,12 +83,12 @@ func GetUserByID(id string) (*User, error) {
 func DeleteUser(id string) error {
 	stmt, err := db.Get().Prepare(deleteUser)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	_, err = stmt.Exec(id)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	return nil
@@ -99,12 +99,12 @@ func GetServersByUser(uid interface{}) ([]server.Server,error) {
 	var servers []server.Server
 	stmt, err := db.Get().Prepare(serversByUser)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	res, err := stmt.Query(uid)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	for res.Next() {
@@ -123,12 +123,12 @@ func (u *User) UpdateUser(id string) (*User, error) {
 	//}
 		stmt, err := db.Get().Prepare(updateUser)
 		if err != nil {
-			log.Printf("%s", err.Error())
+			log.Printf("%s", err)
 			return nil, err
 		}
 		res, err2 := stmt.Exec(&u.Email, &u.Role, id)
 		if err2 != nil {
-			log.Printf("%s", err2.Error())
+			log.Printf("%s", err2)
 			return nil, err2
 		}
 		res.LastInsertId()

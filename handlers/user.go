@@ -14,7 +14,8 @@ import (
 func PostUser(c echo.Context) error {
 	u := user.NewUser()
 	if err := c.Bind(u); err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 	uid, err := u.CreateUser()
 	valErr := u.Validate()
@@ -22,7 +23,8 @@ func PostUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 	u.ID = uid
 
@@ -33,7 +35,8 @@ func PostUser(c echo.Context) error {
 func GetUsers(c echo.Context) error {
 	response, err := user.GetAllUsers()
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 
 	return c.JSON(200, response)
@@ -44,7 +47,8 @@ func GetUser(c echo.Context) error {
 	requestID := c.Param("id")
 	u, err := user.GetUserByID(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 
 	return c.JSON(200, u)
@@ -63,11 +67,13 @@ func UpdateUser(c echo.Context) error {
 	requestID := c.Param("id")
 	u := user.NewUser()
 	if err := c.Bind(u); err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 	uid, err := u.UpdateUser(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 	return c.JSON(201, uid)
 

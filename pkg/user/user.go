@@ -10,7 +10,7 @@ type User struct {
 	ID       int    `json:"id"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,max=50,min=6"`
-	Role string `json:"role" validate:"required"`
+	Role     string `json:"role" validate:"required"`
 }
 
 // NewUser ...
@@ -23,7 +23,7 @@ func (u *User) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(u)
 	if err != nil{
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	return nil

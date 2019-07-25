@@ -12,30 +12,30 @@ import (
 func (s *Server) CreateServer(uid interface{}) (int, error) {
 	stmt, err := db.Get().Prepare(createServer)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	defer stmt.Close()
 	res, err := stmt.Exec(s.IP, s.OS)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 
 	stmt2, err := db.Get().Prepare(userServerRel)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	defer stmt2.Close()
 	_, err2 := stmt2.Exec(uid, r)
 	if err2 != nil {
-		log.Printf("%s", err2.Error())
+		log.Printf("%s", err2)
 		return 0, err2
 	}
 	return int(r), nil
@@ -46,14 +46,14 @@ func GetAllServers() ([]Server, error) {
 	se := []Server{}
 	res, err := db.Get().Query(getAllServers)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	for res.Next() {
 		s := Server{}
 		err := res.Scan(&s.IP, &s.OS)
 		if err != nil {
-			log.Printf("%s", err.Error())
+			log.Printf("%s", err)
 			return nil, err
 		}
 		se = append(se, s)
@@ -70,7 +70,7 @@ func GetServerByID(id string) (*Server, error) {
 	}
 	err := res.Scan(&s.IP, &s.OS)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 
@@ -81,12 +81,12 @@ func GetServerByID(id string) (*Server, error) {
 func DeleteServer(id string) error {
 	stmt, err := db.Get().Prepare(deleteServer)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	_, err = stmt.Exec(id)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	return nil
@@ -96,12 +96,12 @@ func DeleteServer(id string) error {
 func (s *Server) UpdateServer(id string) (*Server, error) {
 	stmt, err := db.Get().Prepare(updateServer)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	res, err2 := stmt.Exec(&s.IP, &s.OS, id)
 	if err2 != nil {
-		log.Printf("%s", err2.Error())
+		log.Printf("%s", err2)
 		return nil, err2
 	}
 	res.LastInsertId()
@@ -126,7 +126,7 @@ func GetServerSSH(serverId string) ([]ssh.SSH, error) {
 		ssh := ssh.SSH{}
 		err := stmt.Scan(&ssh.ID, &ssh.Key)
 		if err != nil {
-			log.Printf("%s", err.Error())
+			log.Printf("%s", err)
 			return nil, err
 		}
 		s = append(s, ssh)

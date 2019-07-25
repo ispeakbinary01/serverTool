@@ -10,18 +10,18 @@ import (
 func (s *Software) CreateSoftware() (int, error) {
 	stmt, err := db.Get().Prepare(createSoftware)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	defer stmt.Close()
 	res, err := stmt.Exec(s.Name, s.Version, s.ServerID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	return int(r), nil
@@ -37,7 +37,7 @@ func GetAllSoftware() ([]Software, error) {
 		// fmt.Printf("%v+\n")
 	}
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	return sw, nil
@@ -52,7 +52,7 @@ func GetSoftwareByID(id string) (*Software, error) {
 	}
 	err := res.Scan(&s.ID, &s.Name, &s.Version, &s.ServerID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 
@@ -63,12 +63,12 @@ func GetSoftwareByID(id string) (*Software, error) {
 func DeleteSoftware(id string) (sql.Result, error) {
 	stmt, err := db.Get().Prepare(deleteSoftware)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	result, err := stmt.Exec(id)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	return result, nil
@@ -82,7 +82,7 @@ func (sw *Software) UpdateSoftware(id string) (*Software, error) {
 	//}
 	stmt, err := db.Get().Prepare(updateSoftware)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	res, err2 := stmt.Exec(&sw.Name, &sw.Version, &sw.ServerID, id)

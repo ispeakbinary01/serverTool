@@ -16,7 +16,8 @@ func PostServer(c echo.Context) error {
 	claims := user.Claims.(jwt.MapClaims)
 	s := server.NewServer()
 	if err := c.Bind(s); err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
+		return err
 	}
 	seID, err := s.CreateServer(claims["id"])
 	valErr := s.Validate()
@@ -35,7 +36,7 @@ func GetServerSSH(c echo.Context) error {
 	requestID := c.Param("id")
 	response, err := server.GetServerSSH(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 
 	return c.JSON(200, response)
@@ -46,7 +47,7 @@ func GetServerSoftware(c echo.Context) error {
 	requestID := c.Param("id")
 	response, err := server.GetserverSoftware(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 
 	return c.JSON(200, response)

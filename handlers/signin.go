@@ -25,13 +25,13 @@ func Signin(c echo.Context) error {
 	scanned := user.User{}
 	err := c.Bind(&u)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 	stmt := db.Get().QueryRow(userCheck, u.Email)
 	if stmt == nil {
 		log.Printf("User with email %s was not found. \n", u.Email)
 	}
-	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Password, &scanned.Position)
+	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Password, &scanned.Role)
 	if err2 != nil {
 		log.Printf("%s", err)
 	}
@@ -60,5 +60,5 @@ func Signin(c echo.Context) error {
 
 
 const userCheck = `
-SELECT id, email, password, position FROM users WHERE email = ?
+SELECT id, email, password, role FROM users WHERE email = ?
 `

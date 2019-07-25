@@ -4,6 +4,7 @@ import (
 	"github.com/ispeakbinary01/serverTool/handlers"
 	"github.com/ispeakbinary01/serverTool/middlewares"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 // TODO: Fix Validation: works but still writes in database even if it the request is bad/wrong
@@ -11,6 +12,8 @@ import (
 func main() {
 	api := echo.New()
 	api.Use(middlewares.IsLoggedIn)
+	//api.Use(middlewares.AdminRoutes)
+	api.Use(middleware.Secure())
 	api.POST("/signin", handlers.Signin)
 	api.POST("/inventories/software", handlers.PostSoftware)                // Works
 	api.GET("/inventories/software", handlers.GetAllSoftware)               // Works

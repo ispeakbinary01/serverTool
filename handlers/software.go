@@ -11,7 +11,7 @@ import (
 func PostSoftware(c echo.Context) error {
 	s := software.NewSoftware()
 	if err := c.Bind(s); err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 	swID, err := s.CreateSoftware()
 	valErr := s.Validate()
@@ -29,7 +29,7 @@ func PostSoftware(c echo.Context) error {
 func GetAllSoftware(c echo.Context) error {
 	response, err := software.GetAllSoftware()
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 
 	return c.JSON(200, response)
@@ -40,7 +40,7 @@ func GetSoftwareByID(c echo.Context) error {
 	requestID := c.Param("id")
 	s, err := software.GetSoftwareByID(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 	return c.JSON(200, s)
 }
@@ -50,7 +50,7 @@ func DeleteSoftware(c echo.Context) error {
 	requestID := c.Param("id")
 	s, err := software.DeleteSoftware(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 
 	return c.JSON(200, s)
@@ -61,11 +61,11 @@ func UpdateSoftware(c echo.Context) error {
 	requestID := c.Param("id")
 	sw := software.NewSoftware()
 	if err := c.Bind(sw); err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 	swid, err := sw.UpdateSoftware(requestID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 	}
 	return c.JSON(201, swid)
 

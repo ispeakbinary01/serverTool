@@ -9,18 +9,18 @@ import (
 func (ssh *SSH) CreateSSH() (int, error) {
 	stmt, err := db.Get().Prepare(createSSH)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	defer stmt.Close()
 	res, err := stmt.Exec(ssh.Key, ssh.ServerID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return 0, err
 	}
 	return int(r), nil
@@ -37,7 +37,7 @@ func GetAllSSHs() ([]SSH, error) {
 		// fmt.Printf("%v+\n")
 	}
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	return sshs, nil
@@ -52,7 +52,7 @@ func GetSShByID(id string) (*SSH, error) {
 	}
 	err:= res.Scan(&ssh.Key, &ssh.ServerID)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 
@@ -63,12 +63,12 @@ func GetSShByID(id string) (*SSH, error) {
 func DeleteSSH(id string) error {
 	stmt, err := db.Get().Prepare(deleteSSH)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	 res, err := stmt.Query(id)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return err
 	}
 	 res.Next()
@@ -83,12 +83,12 @@ func (ssh *SSH) UpdateSSH(id string) (*SSH, error) {
 	//}
 	stmt, err := db.Get().Prepare(updateSSH)
 	if err != nil {
-		log.Printf("%s", err.Error())
+		log.Printf("%s", err)
 		return nil, err
 	}
 	res, err2 := stmt.Exec(ssh.Key, ssh.ServerID, id)
 	if err2 != nil {
-		log.Printf("%s", err2.Error())
+		log.Printf("%s", err)
 		return nil, err2
 	}
 	res.LastInsertId()
