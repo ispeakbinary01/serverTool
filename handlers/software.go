@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/ispeakbinary01/serverTool/pkg/server/software"
 	"github.com/labstack/echo/v4"
+	"log"
 	"net/http"
 )
 
@@ -11,7 +11,7 @@ import (
 func PostSoftware(c echo.Context) error {
 	s := software.NewSoftware()
 	if err := c.Bind(s); err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	swID, err := s.CreateSoftware()
 	valErr := s.Validate()
@@ -19,7 +19,7 @@ func PostSoftware(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	s.ID = swID
 	return c.JSON(201, swID)
@@ -29,7 +29,7 @@ func PostSoftware(c echo.Context) error {
 func GetAllSoftware(c echo.Context) error {
 	response, err := software.GetAllSoftware()
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 
 	return c.JSON(200, response)
@@ -40,8 +40,7 @@ func GetSoftwareByID(c echo.Context) error {
 	requestID := c.Param("id")
 	s, err := software.GetSoftwareByID(requestID)
 	if err != nil {
-		fmt.Println(err)
-		return err
+		log.Printf("%s", err.Error())
 	}
 	return c.JSON(200, s)
 }
@@ -51,7 +50,7 @@ func DeleteSoftware(c echo.Context) error {
 	requestID := c.Param("id")
 	s, err := software.DeleteSoftware(requestID)
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 
 	return c.JSON(200, s)
@@ -62,11 +61,11 @@ func UpdateSoftware(c echo.Context) error {
 	requestID := c.Param("id")
 	sw := software.NewSoftware()
 	if err := c.Bind(sw); err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	swid, err := sw.UpdateSoftware(requestID)
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	return c.JSON(201, swid)
 

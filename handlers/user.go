@@ -4,6 +4,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ispeakbinary01/serverTool/pkg/user"
 	"github.com/labstack/echo/v4"
+	"log"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ import (
 func PostUser(c echo.Context) error {
 	u := user.NewUser()
 	if err := c.Bind(u); err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	uid, err := u.CreateUser()
 	valErr := u.Validate()
@@ -21,7 +22,7 @@ func PostUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	u.ID = uid
 
@@ -32,7 +33,7 @@ func PostUser(c echo.Context) error {
 func GetUsers(c echo.Context) error {
 	response, err := user.GetAllUsers()
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 
 	return c.JSON(200, response)
@@ -43,7 +44,7 @@ func GetUser(c echo.Context) error {
 	requestID := c.Param("id")
 	u, err := user.GetUserByID(requestID)
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 
 	return c.JSON(200, u)
@@ -62,11 +63,11 @@ func UpdateUser(c echo.Context) error {
 	requestID := c.Param("id")
 	u := user.NewUser()
 	if err := c.Bind(u); err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	uid, err := u.UpdateUser(requestID)
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	return c.JSON(201, uid)
 

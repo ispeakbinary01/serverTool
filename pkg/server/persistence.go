@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
 	"github.com/ispeakbinary01/serverTool/pkg/server/software"
 	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
@@ -13,26 +12,31 @@ import (
 func (s *Server) CreateServer(uid interface{}) (int, error) {
 	stmt, err := db.Get().Prepare(createServer)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	defer stmt.Close()
 	res, err := stmt.Exec(s.IP, s.OS)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 
 	stmt2, err := db.Get().Prepare(userServerRel)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err.Error())
+		return 0, err
 	}
 	defer stmt2.Close()
 	_, err2 := stmt2.Exec(uid, r)
 	if err2 != nil {
-		log.Fatal(err2)
+		log.Printf("%s", err2.Error())
+		return 0, err2
 	}
 	return int(r), nil
 }
@@ -42,12 +46,14 @@ func GetAllServers() ([]Server, error) {
 	se := []Server{}
 	res, err := db.Get().Query(getAllServers)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 	for res.Next() {
 		s := Server{}
 		err := res.Scan(&s.IP, &s.OS)
 		if err != nil {
+			log.Printf("%s", err.Error())
 			return nil, err
 		}
 		se = append(se, s)
@@ -64,6 +70,7 @@ func GetServerByID(id string) (*Server, error) {
 	}
 	err := res.Scan(&s.IP, &s.OS)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 
@@ -74,10 +81,12 @@ func GetServerByID(id string) (*Server, error) {
 func DeleteServer(id string) error {
 	stmt, err := db.Get().Prepare(deleteServer)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return err
 	}
 	_, err = stmt.Exec(id)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return err
 	}
 	return nil
@@ -87,12 +96,12 @@ func DeleteServer(id string) error {
 func (s *Server) UpdateServer(id string) (*Server, error) {
 	stmt, err := db.Get().Prepare(updateServer)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 	res, err2 := stmt.Exec(&s.IP, &s.OS, id)
 	if err2 != nil {
-		fmt.Println(err2)
+		log.Printf("%s", err2.Error())
 		return nil, err2
 	}
 	res.LastInsertId()
@@ -115,9 +124,9 @@ func GetServerSSH(serverId string) ([]ssh.SSH, error) {
 	}
 	for stmt.Next() {
 		ssh := ssh.SSH{}
-		err := stmt.Scan(&ssh.Username, &ssh.Key)
+		err := stmt.Scan(&ssh.ID, &ssh.Key)
 		if err != nil {
-			log.Println(err)
+			log.Printf("%s", err.Error())
 			return nil, err
 		}
 		s = append(s, ssh)
@@ -157,27 +166,27 @@ INSERT INTO server_user_rel (user_id, server_id) VALUES (?, ?)
 `
 
 const deleteServer = `
-DELETE FROM server WHERE id = ?
+DELETE FROM servers WHERE id = ?
 `
 
 const getServer = `
-SELECT ip, os FROM server WHERE id = ?
+SELECT ip, os FROM servers WHERE id = ?
 `
 
 const getAllServers = `
-SELECT id, ip, os FROM server
+SELECT id, ip, os FROM servers
 `
 
 const createServer = `
-INSERT INTO server(ip, os) VALUES(?, ?)
+INSERT INTO servers(ip, os) VALUES(?, ?)
 `
 
 const updateServer = `
-UPDATE server SET ip = ?, os = ? WHERE id = ?
+UPDATE servers SET ip = ?, os = ? WHERE id = ?
 `
 
 const getServerSSH = `
-SELECT username, key FROM ssh WHERE server_id = ?
+SELECT key FROM ssh WHERE server_id = ?
 `
 
 const getServerSoftware = `

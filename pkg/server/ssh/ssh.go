@@ -8,8 +8,6 @@ import (
 // SSH ...
 type SSH struct {
 	ID       int    `json:"id"validate:"required"`
-	Username string `json:"username"validate:"required"`
-	Password string `json:"password"validate:"required"`
 	Key      int    `json:"key"validate:"required"`
 	ServerID int `json:"server_id"validate:"required"`
 }

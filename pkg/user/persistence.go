@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
 	"github.com/ispeakbinary01/serverTool/pkg/server"
 	"golang.org/x/crypto/bcrypt"
@@ -20,19 +19,23 @@ func hashPassword(password string) (string, error) {
 func (u *User) CreateUser() (int, error) {
 	stmt, err := db.Get().Prepare(createUser)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	hash, err := hashPassword(u.Password)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err.Error())
+		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(u.Username, u.Email, hash, u.Position)
+	res, err := stmt.Exec(u.Email, hash, u.Position)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	return int(r), nil
@@ -44,11 +47,12 @@ func GetAllUsers() ([]User, error) {
 	res, err := db.Get().Query(getUsers)
 	for res.Next() {
 		u := User{}
-		res.Scan(&u.Username, &u.Email, &u.Position)
+		res.Scan(&u.Email, &u.Position)
 		us = append(us, u)
 		// fmt.Printf("%v+\n")
 	}
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 	return us, nil
@@ -61,8 +65,9 @@ func GetUserByID(id string) (*User, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err:= res.Scan(&u.Username, &u.Email, &u.Position)
+	err:= res.Scan(&u.Email, &u.Position)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 
@@ -77,12 +82,13 @@ func GetUserByID(id string) (*User, error) {
 // DeleteUser ...
 func DeleteUser(id string) error {
 	stmt, err := db.Get().Prepare(deleteUser)
-	if err != nil { 
+	if err != nil {
+		log.Printf("%s", err.Error())
 		return err
 	}
 	_, err = stmt.Exec(id)
 	if err != nil {
-
+		log.Printf("%s", err.Error())
 		return err
 	}
 	return nil
@@ -93,10 +99,12 @@ func GetServersByUser(uid interface{}) ([]server.Server,error) {
 	var servers []server.Server
 	stmt, err := db.Get().Prepare(serversByUser)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 	res, err := stmt.Query(uid)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 	for res.Next() {
@@ -115,12 +123,12 @@ func (u *User) UpdateUser(id string) (*User, error) {
 	//}
 		stmt, err := db.Get().Prepare(updateUser)
 		if err != nil {
-			fmt.Println(err)
+			log.Printf("%s", err.Error())
 			return nil, err
 		}
-		res, err2 := stmt.Exec(&u.Username, &u.Email, &u.Position, id)
+		res, err2 := stmt.Exec(&u.Email, &u.Position, id)
 		if err2 != nil {
-			fmt.Println(err2)
+			log.Printf("%s", err2.Error())
 			return nil, err2
 		}
 		res.LastInsertId()
@@ -129,26 +137,26 @@ func (u *User) UpdateUser(id string) (*User, error) {
 }
 
 const serversByUser = `
-SELECT server.id, server.ip, server.os FROM server INNER JOIN server_user_rel sur ON server.id = sur.server_id INNER JOIN user ON sur.user_id = user.id WHERE user.id = ?
+SELECT servers.id, servers.ip, servers.os FROM servers INNER JOIN server_user_rel sur ON servers.id = sur.server_id INNER JOIN users ON sur.user_id = users.id WHERE users.id = ?
 `
 
 const deleteUser = `
-DELETE FROM user WHERE id = ?
+DELETE FROM users WHERE id = ?
 `
 
 const getUser = `
-SELECT username, email, position FROM user WHERE id = ?
+SELECT email, position FROM users WHERE id = ?
 `
 
 const getUsers = `
-SELECT username, email, position FROM user
+SELECT email, position FROM users
 `
 
 
 const createUser = `
-INSERT INTO user (username, email, password, position) VALUES (?, ?, ?, ?)
+INSERT INTO users (email, password, position) VALUES (?, ?, ?)
 `
 
 const updateUser = `
-UPDATE user SET username = ?, email = ?, position = ? WHERE id = ?
+UPDATE users SET email = ?, position = ? WHERE id = ?
 `

@@ -25,7 +25,7 @@ func Signin(c echo.Context) error {
 	scanned := user.User{}
 	err := c.Bind(&u)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("%s", err.Error())
 	}
 	stmt := db.Get().QueryRow(userCheck, u.Email)
 	if stmt == nil {
@@ -33,10 +33,10 @@ func Signin(c echo.Context) error {
 	}
 	err2 := stmt.Scan(&scanned.ID, &scanned.Email, &scanned.Password, &scanned.Position)
 	if err2 != nil {
-		log.Fatal(err)
+		log.Printf("%s", err)
 	}
 	if checkHash(u.Password, scanned.Password) {
-		fmt.Printf("Welcome %s \n", scanned.Username)
+		fmt.Printf("Welcome %s \n", scanned.Email)
 
 		token := jwt.New(jwt.SigningMethodHS256)
 		claims := token.Claims.(jwt.MapClaims)
@@ -46,7 +46,7 @@ func Signin(c echo.Context) error {
 
 		t, err := token.SignedString([]byte("secret"))
 		if err != nil {
-			return err
+			log.Printf("%s", err)
 		}
 
 		return c.JSON(http.StatusOK, map[string]string{
@@ -60,5 +60,5 @@ func Signin(c echo.Context) error {
 
 
 const userCheck = `
-SELECT id, email, password, position FROM user WHERE email = ?
+SELECT id, email, password, position FROM users WHERE email = ?
 `

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
 	"github.com/labstack/echo/v4"
+	"log"
 	"net/http"
 )
 
@@ -11,7 +12,7 @@ import (
 func PostSSH(c echo.Context) error {
 	ssh := ssh.NewSSH()
 	if err := c.Bind(ssh); err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	sshId, err := ssh.CreateSSH()
 	valErr := ssh.Validate()
@@ -20,7 +21,7 @@ func PostSSH(c echo.Context) error {
 	}
 	if err != nil {
 		fmt.Print(err)
-		return err
+		log.Printf("%s", err.Error())
 	}
 	ssh.ID = sshId
 	return c.JSON(201, ssh)
@@ -30,7 +31,7 @@ func PostSSH(c echo.Context) error {
 func GetSSHs(c echo.Context) error {
 	response, err := ssh.GetAllSSHs()
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 
 	return c.JSON(200, response)
@@ -41,8 +42,7 @@ func GetSSH(c echo.Context) error {
 	requestID := c.Param("id")
 	ssh, err := ssh.GetSShByID(requestID)
 	if err != nil {
-		fmt.Println(err)
-		return err
+		log.Printf("%s", err.Error())
 	}
 	return c.JSON(200, ssh)
 }
@@ -60,11 +60,11 @@ func UpdateSSH(c echo.Context) error {
 	requestID := c.Param("id")
 	ssh := ssh.NewSSH()
 	if err := c.Bind(ssh); err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	sshid, err := ssh.UpdateSSH(requestID)
 	if err != nil {
-		return err
+		log.Printf("%s", err.Error())
 	}
 	return c.JSON(201, sshid)
 

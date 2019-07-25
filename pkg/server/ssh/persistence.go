@@ -1,23 +1,26 @@
 package ssh
 
 import (
-	"fmt"
 	"github.com/ispeakbinary01/serverTool/db"
+	"log"
 )
 
 // CreateSSH ...
 func (ssh *SSH) CreateSSH() (int, error) {
 	stmt, err := db.Get().Prepare(createSSH)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	defer stmt.Close()
-	res, err := stmt.Exec(ssh.Username, ssh.Password, ssh.Key, ssh.ServerID)
+	res, err := stmt.Exec(ssh.Key, ssh.ServerID)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	r, err := res.LastInsertId()
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return 0, err
 	}
 	return int(r), nil
@@ -29,11 +32,12 @@ func GetAllSSHs() ([]SSH, error) {
 	res, err := db.Get().Query(getSSHs)
 	for res.Next() {
 		ssh := SSH{}
-		res.Scan(&ssh.ID, &ssh.Username, &ssh.Key, &ssh.ServerID)
+		res.Scan(&ssh.ID, &ssh.Key, &ssh.ServerID)
 		sshs = append(sshs, ssh)
 		// fmt.Printf("%v+\n")
 	}
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 	return sshs, nil
@@ -46,8 +50,9 @@ func GetSShByID(id string) (*SSH, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err:= res.Scan(&ssh.Username, &ssh.Key, &ssh.ServerID)
+	err:= res.Scan(&ssh.Key, &ssh.ServerID)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
 
@@ -58,10 +63,12 @@ func GetSShByID(id string) (*SSH, error) {
 func DeleteSSH(id string) error {
 	stmt, err := db.Get().Prepare(deleteSSH)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return err
 	}
 	 res, err := stmt.Query(id)
 	if err != nil {
+		log.Printf("%s", err.Error())
 		return err
 	}
 	 res.Next()
@@ -76,12 +83,12 @@ func (ssh *SSH) UpdateSSH(id string) (*SSH, error) {
 	//}
 	stmt, err := db.Get().Prepare(updateSSH)
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("%s", err.Error())
 		return nil, err
 	}
-	res, err2 := stmt.Exec(ssh.Username, ssh.Key, ssh.ServerID, id)
+	res, err2 := stmt.Exec(ssh.Key, ssh.ServerID, id)
 	if err2 != nil {
-		fmt.Println(err2)
+		log.Printf("%s", err2.Error())
 		return nil, err2
 	}
 	res.LastInsertId()
@@ -95,17 +102,17 @@ DELETE FROM ssh WHERE id = ?
 `
 
 const getSSH = `
-SELECT username, key, server_id FROM ssh WHERE id = ?
+SELECT key, server_id FROM ssh WHERE id = ?
 `
 
 const getSSHs = `
-SELECT id, username, key, server_id FROM ssh
+SELECT id, key, server_id FROM ssh
 `
 
 const createSSH = `
-INSERT INTO ssh(username, password, key, server_id) VALUES(?, ?, ?, ?)
+INSERT INTO ssh(key, server_id) VALUES(?, ?)
 `
 
 const updateSSH = `
-UPDATE ssh SET username = ?, key = ?, server_id = ? WHERE id = ?
+UPDATE ssh SET key = ?, server_id = ? WHERE id = ?
 `
