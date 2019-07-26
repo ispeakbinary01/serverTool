@@ -7,12 +7,11 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// TODO: Separ
 
 func main() {
 	api := echo.New()
-	// api.Use(middlewares.AdminRoutes)
-	api.Use(middlewares.IsLoggedIn)
+	 api.Use(middlewares.IsLoggedIn)
+	api.Use(middlewares.AdminRoutes)
 	api.Use(middleware.Secure())
 	api.POST("/signin", handlers.Signin)
 	api.POST("/inventories/software", handlers.PostSoftware)                // Works

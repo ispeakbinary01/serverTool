@@ -5,6 +5,7 @@ import (
 	"github.com/ispeakbinary01/serverTool/pkg/server"
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"strings"
 )
 
 // hashPassword
@@ -28,6 +29,7 @@ func (u *User) CreateUser() (int, error) {
 		return 0, err
 	}
 	defer stmt.Close()
+	u.Role = strings.ToLower(u.Role)
 	res, err := stmt.Exec(u.Email, hash, u.Role)
 	if err != nil {
 		log.Printf("%s", err)
@@ -126,6 +128,7 @@ func (u *User) UpdateUser(id string) (*User, error) {
 			log.Printf("%s", err)
 			return nil, err
 		}
+		u.Role = strings.ToLower(u.Role)
 		res, err2 := stmt.Exec(&u.Email, &u.Role, id)
 		if err2 != nil {
 			log.Printf("%s", err2)
