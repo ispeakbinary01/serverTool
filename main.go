@@ -12,7 +12,7 @@ import (
 func main() {
 	api := echo.New()
 	api.Use(middlewares.IsLoggedIn)
-	//api.Use(middlewares.AdminRoutes)
+	// api.Use(middlewares.AdminRoutes)
 	api.Use(middleware.Secure())
 	api.POST("/signin", handlers.Signin)
 	api.POST("/inventories/software", handlers.PostSoftware)                // Works

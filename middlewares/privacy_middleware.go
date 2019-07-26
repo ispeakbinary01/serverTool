@@ -20,23 +20,19 @@ var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
 //var AdminRoutes = middleware.JWTWithConfig(middleware.JWTConfig{
 //	SigningKey: []byte("secret"),
 //	Skipper: func(c echo.Context) bool {
-//		var routes = make([]string, 4)
+//		var routes = make([]string, 3)
 //		routes = append(routes, "/inventories/software")
 //		routes = append(routes, "/inventories/ssh")
 //		routes = append(routes, "/inventories/servers")
 //		routes = append(routes, "/users")
-//		u := c.Get("users").(*jwt.Token)
-//		fmt.Println("UUUUUUUUU PRINTED")
-//		fmt.Println(u)
+//		u := c.Get("user").(*jwt.Token)
 //		claims := u.Claims.(jwt.MapClaims)
-//		fmt.Println("CLAIMS PRINTED!!!!!")
-//		fmt.Println(claims)
 //		for _, item := range routes {
 //			if c.Request().RequestURI == item && claims["role"] != "Admin" {
 //				fmt.Println("NO!")
-//				return false
+//				return true
 //			}
 //		}
-//		return true
+//		return false
 //	},
 //})

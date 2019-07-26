@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
-	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
+
+	"github.com/ispeakbinary01/serverTool/pkg/server/ssh"
+	"github.com/labstack/echo/v4"
 )
 
 // PostSSH ...
@@ -13,16 +14,16 @@ func PostSSH(c echo.Context) error {
 	if err := c.Bind(ssh); err != nil {
 		log.Printf("%s", err)
 	}
-	sshId, err := ssh.CreateSSH()
 	valErr := ssh.Validate()
 	if valErr != nil {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
+	sshID, err := ssh.CreateSSH()
 	if err != nil {
 		log.Printf("%s", err)
 		return err
 	}
-	ssh.ID = sshId
+	ssh.ID = sshID
 	return c.JSON(201, ssh)
 }
 
@@ -51,9 +52,9 @@ func GetSSH(c echo.Context) error {
 // DeleteSSH ...
 func DeleteSSH(c echo.Context) error {
 	requestID := c.Param("id")
-	delSsh := ssh.DeleteSSH(requestID)
+	delSSH := ssh.DeleteSSH(requestID)
 
-	return c.JSON(200, delSsh)
+	return c.JSON(200, delSSH)
 }
 
 // UpdateSSH ...

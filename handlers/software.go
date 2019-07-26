@@ -13,11 +13,11 @@ func PostSoftware(c echo.Context) error {
 	if err := c.Bind(s); err != nil {
 		log.Printf("%s", err)
 	}
-	swID, err := s.CreateSoftware()
 	valErr := s.Validate()
 	if valErr != nil {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
+	swID, err := s.CreateSoftware()
 	if err != nil {
 		log.Printf("%s", err)
 	}

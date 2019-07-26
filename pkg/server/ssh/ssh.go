@@ -9,7 +9,7 @@ import (
 type SSH struct {
 	ID       int    `json:"id"`
 	Key      string    `json:"key"validate:"required"`
-	ServerID int `json:"server_id"validate:"required"`
+	ServerID int `json:"server_id"validate:"required,alphanum"`
 }
 
 // NewSSH ...

@@ -8,9 +8,9 @@ import (
 // User ...
 type User struct {
 	ID       int    `json:"id"`
-	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,max=50,min=6"`
-	Role     string `json:"role" validate:"required"`
+	Email    string `json:"email" validate:"required,email,alphanum"`
+	Password string `json:"password" validate:"required,max=50,min=6,alphanum"`
+	Role     string `json:"role" validate:"required,alphanum"`
 }
 
 // NewUser ...

@@ -7,9 +7,9 @@ import (
 
 // Server ...
 type Server struct {
-	ID int `json:"id"`
+	ID int `json:"id"validate:"alphanum"`
 	IP string    `json:"ip"validate:"required"`
-	OS string `json:"os"validate:"required"`
+	OS string `json:"os"validate:"required,alphanum"`
 }
 
 func NewServer() *Server {

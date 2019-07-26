@@ -14,20 +14,20 @@ func Get() *sql.DB {
 		var err error
 		db, err = sql.Open("sqlite3", "./serverInventory.db")
 		if err != nil {
-			log.Printf("%s", err.Error())
+			log.Printf("%s", err)
 		}
 	}
 
 	return db
 }
 
-// Init ...
-func Init() {
+// init
+func init() {
 	dbc := Get()
 	query, err := dbc.Prepare(tablesCreated)
 
 	if _, err = query.Exec(); err != nil {
-		panic(err)
+		log.Printf("%s", err)
 	}
 }
 

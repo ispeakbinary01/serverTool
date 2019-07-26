@@ -19,11 +19,11 @@ func PostServer(c echo.Context) error {
 		log.Printf("%s", err)
 		return err
 	}
-	seID, err := s.CreateServer(claims["id"])
 	valErr := s.Validate()
 	if valErr != nil {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
+	seID, err := s.CreateServer(claims["id"])
 	if err != nil {
 		fmt.Println(err)
 		return err

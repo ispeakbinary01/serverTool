@@ -17,11 +17,11 @@ func PostUser(c echo.Context) error {
 		log.Printf("%s", err)
 		return err
 	}
-	uid, err := u.CreateUser()
 	valErr := u.Validate()
 	if valErr != nil {
 		return c.JSON(http.StatusBadRequest, valErr)
 	}
+	uid, err := u.CreateUser()
 	if err != nil {
 		log.Printf("%s", err)
 		return err
