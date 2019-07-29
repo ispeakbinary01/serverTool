@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -8,23 +9,83 @@ import (
 )
 
 var routes = map[string][]string {
-	"admin": {
-		"/inventories/software",
-		"/inventories/ssh",
-		"/inventories/servers",
-		"/users",
+	"GET /inventories/software": {
+		"admin",
+		"moderator",
+		"user",
 	},
-	"moderator": {
-		"/inventories/software",
-		"/inventories/ssh",
-		"/inventories/servers",
-		"/users",
+	"GET /inventories/software/:id": {
+		"admin",
+		"moderator",
+		"user",
 	},
-	"user": {
-		"/inventories/software",
-		"/inventories/ssh",
-		"/inventories/servers",
-		"/users",
+	"POST /inventories/software": {
+		"admin",
+		"moderator",
+	},
+	"PUT /inventories/software/:id": {
+		"admin",
+		"moderator",
+	},
+	"DELETE /inventories/software/:id": {
+		"admin",
+	},
+	"GET /inventories/ssh": {
+		"admin",
+		"moderator",
+		"user",
+	},
+	"GET /inventories/ssh/:id": {
+		"admin",
+		"moderator",
+		"user",
+	},
+	"POST /inventories/ssh": {
+		"admin",
+		"moderator",
+	},
+	"PUT /inventories/ssh/:id": {
+		"admin",
+		"moderator",
+	},
+	"DELETE /inventories/ssh/:id": {
+		"admin",
+	},
+	"GET /users": {
+		"admin",
+		"moderator",
+	},
+	"GET /users/:id": {
+		"admin",
+		"moderator",
+	},
+	"POST /users": {
+		"admin",
+	},
+	"PUT /users/:id": {
+		"admin",
+	},
+	"DELETE /users/:id": {
+		"admin",
+	},
+	"GET /inventories/serversSSH/": {
+		"admin",
+		"moderator",
+		"user",
+	},
+	"GET /inventories/serversSoftware/:id": {
+		"admin",
+		"moderator",
+		"user",
+	},
+	"GET /serversByUser": {
+		"admin",
+		"moderator",
+		"user",
+	},
+	"POST /inventories/servers": {
+		"admin",
+		"moderator",
 	},
 }
 
@@ -40,14 +101,19 @@ var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
 	},
 })
 
-func AdminRoutes(next echo.HandlerFunc) echo.HandlerFunc {
+func RoutesPrivileges(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		u := c.Get("user").(*jwt.Token)
-		claims := u.Claims.(jwt.MapClaims)
-		for _, item := range routes[claims["role"].(string)] {
-			if c.Request().RequestURI == item && claims["role"] != "admin" {
-				return c.JSON(http.StatusUnauthorized, "Role not suitable for function.")
+		pathMethod := c.Request().Method + " " + c.Path()
+		if temp := c.Get("user"); temp != nil {
+			u := temp.(*jwt.Token)
+			claims := u.Claims.(jwt.MapClaims)
+			for _, item := range  routes[pathMethod] {
+				if claims["role"] != item {
+					fmt.Println("IN IF!")
+					return c.JSON(http.StatusUnauthorized, "Role not suitable for function.")
+				}
 			}
+
 		}
 		return next(c)
 	}
