@@ -64,6 +64,9 @@ var routes = map[string][]string {
 	"PUT /users/:id": {
 		"admin",
 	},
+	"PATCH /users/:id": {
+		"admin",
+	},
 	"DELETE /users/:id": {
 		"admin",
 	},

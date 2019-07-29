@@ -89,4 +89,21 @@ func GetServersByUser(c echo.Context) error {
 	}
 	return c.JSON(200, response)
 }
+
+// PatchRole ...
+func PatchRole(c echo.Context) error {
+	requestID := c.Param("id")
+	u := user.NewUser()
+	if err := c.Bind(u); err != nil {
+		log.Printf("%s", err)
+		return err
+	}
+	_, err2 := u.PatchRole(requestID)
+	if err2 != nil {
+		log.Printf("%s", err2)
+		return err2
+	}
+	return c.JSON(201, "Role changed on user " + requestID)
+
+}
  

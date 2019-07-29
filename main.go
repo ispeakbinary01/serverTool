@@ -28,6 +28,7 @@ func main() {
 	api.GET("/users/:id", handlers.GetUser)                                 // Works
 	api.POST("/users", handlers.PostUser)                                   // Works
 	api.PUT("users/:id", handlers.UpdateUser)                               // Works
+	api.PATCH("users/:id", handlers.PatchRole)
 	api.DELETE("/users/:id", handlers.DeleteUser)                           // Works but returns null
 	api.GET("/inventories/serversSSH/:id", handlers.GetServerSSH)           // Works
 	api.GET("/inventories/serversSoftware/:id", handlers.GetServerSoftware) // Works

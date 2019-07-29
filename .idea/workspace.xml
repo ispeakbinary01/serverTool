@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fe847bc8-b958-42f7-b5bd-10d2fcb92228" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/handlers/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/handlers/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middlewares/privacy_middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/middlewares/privacy_middleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/user/persistence.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/user/persistence.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/serverInventory.db" beforeDir="false" afterPath="$PROJECT_DIR$/serverInventory.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/middlewares/privacy_middleware.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1659">
-              <caret line="79" column="11" lean-forward="true" selection-start-line="79" selection-start-column="11" selection-end-line="79" selection-end-column="11" />
+            <state relative-caret-position="1050">
+              <caret line="50" column="8" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="8" />
               <folding>
                 <element signature="e#21#147#0" expanded="true" />
               </folding>
@@ -62,10 +64,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/handlers/user.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="552">
+              <caret line="100" column="5" selection-start-line="100" selection-start-column="5" selection-end-line="100" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="10" selection-start-line="10" selection-end-line="38" selection-end-column="1" />
+            <state relative-caret-position="441">
+              <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -107,16 +118,16 @@
         <option value="$PROJECT_DIR$/handlers/server.go" />
         <option value="$PROJECT_DIR$/handlers/software.go" />
         <option value="$PROJECT_DIR$/handlers/ssh.go" />
-        <option value="$PROJECT_DIR$/handlers/user.go" />
         <option value="$PROJECT_DIR$/handlers/signin.go" />
         <option value="$PROJECT_DIR$/pkg/server/ssh/ssh.go" />
         <option value="$PROJECT_DIR$/pkg/server/software/software.go" />
         <option value="$PROJECT_DIR$/pkg/server/server.go" />
         <option value="$PROJECT_DIR$/runCmd.sh" />
-        <option value="$PROJECT_DIR$/pkg/user/persistence.go" />
         <option value="$PROJECT_DIR$/pkg/user/user.go" />
         <option value="$PROJECT_DIR$/db/db.go" />
         <option value="$PROJECT_DIR$/test" />
+        <option value="$PROJECT_DIR$/pkg/user/persistence.go" />
+        <option value="$PROJECT_DIR$/handlers/user.go" />
         <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/middlewares/privacy_middleware.go" />
       </list>
@@ -141,6 +152,16 @@
             <path>
               <item name="serverTool" type="b2602c69:ProjectViewProjectNode" />
               <item name="serverTool" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="serverTool" type="b2602c69:ProjectViewProjectNode" />
+              <item name="serverTool" type="462c0819:PsiDirectoryNode" />
+              <item name="handlers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="serverTool" type="b2602c69:ProjectViewProjectNode" />
+              <item name="serverTool" type="462c0819:PsiDirectoryNode" />
+              <item name="middlewares" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -409,13 +430,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/handlers/user.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pkg/server/server.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
@@ -423,13 +437,6 @@
           <folding>
             <element signature="e#16#72#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pkg/user/persistence.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2604">
-          <caret line="130" column="8" selection-start-line="130" selection-start-column="8" selection-end-line="130" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -512,17 +519,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pkg/user/persistence.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1336">
+          <caret line="138" column="42" selection-start-line="138" selection-start-column="42" selection-end-line="138" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handlers/user.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="552">
+          <caret line="100" column="5" selection-start-line="100" selection-start-column="5" selection-end-line="100" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="10" selection-start-line="10" selection-end-line="38" selection-end-column="1" />
+        <state relative-caret-position="441">
+          <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/middlewares/privacy_middleware.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1659">
-          <caret line="79" column="11" lean-forward="true" selection-start-line="79" selection-start-column="11" selection-end-line="79" selection-end-column="11" />
+        <state relative-caret-position="1050">
+          <caret line="50" column="8" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="8" />
           <folding>
             <element signature="e#21#147#0" expanded="true" />
           </folding>

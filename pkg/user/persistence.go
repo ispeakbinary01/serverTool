@@ -119,10 +119,6 @@ func GetServersByUser(uid interface{}) ([]server.Server,error) {
 
 // UpdateUser ...
 func (u *User) UpdateUser(id string) (*User, error) {
-	//requestID, _ := strconv.Atoi(c.Param("id"))
-	//if err := c.Bind(updatedSoftware); err != nil {
-	//	return err
-	//}
 		stmt, err := db.Get().Prepare(updateUser)
 		if err != nil {
 			log.Printf("%s", err)
@@ -137,6 +133,23 @@ func (u *User) UpdateUser(id string) (*User, error) {
 		res.LastInsertId()
 
 		return u, nil
+}
+
+// PatchRole ...
+func (u *User) PatchRole(id string) (*User, error) {
+	stmt, err := db.Get().Prepare(patchRole)
+	if err != nil {
+		log.Printf("%s", err)
+		return nil, err
+	}
+	u.Role = strings.ToLower(u.Role)
+	_, err2 := stmt.Exec(&u.Role, id)
+	if err2 != nil {
+		log.Printf("%s", err2)
+		return nil, err2
+	}
+
+	return u, nil
 }
 
 const serversByUser = `
@@ -155,11 +168,14 @@ const getUsers = `
 SELECT email, role FROM users
 `
 
-
 const createUser = `
 INSERT INTO users (email, password, role) VALUES (?, ?, ?)
 `
 
 const updateUser = `
 UPDATE users SET email = ?, role = ? WHERE id = ?
+`
+
+const patchRole = `
+UPDATE users SET role = ? WHERE id = ?
 `
