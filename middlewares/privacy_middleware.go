@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -87,6 +86,11 @@ var routes = map[string][]string {
 		"admin",
 		"moderator",
 	},
+	"POST /signin": {
+		"admin",
+		"moderator",
+		"user",
+	},
 }
 
 
@@ -108,14 +112,12 @@ func RoutesPrivileges(next echo.HandlerFunc) echo.HandlerFunc {
 			u := temp.(*jwt.Token)
 			claims := u.Claims.(jwt.MapClaims)
 			for _, item := range  routes[pathMethod] {
-				if claims["role"] != item {
-					fmt.Println("IN IF!")
-					return c.JSON(http.StatusUnauthorized, "Role not suitable for function.")
+				if claims["role"] == item {
+					return next(c)
 				}
 			}
-
 		}
-		return next(c)
+		return c.JSON(http.StatusUnauthorized, "Role not suitable for function.")
 	}
 }
 
