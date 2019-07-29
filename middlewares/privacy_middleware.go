@@ -86,11 +86,6 @@ var routes = map[string][]string {
 		"admin",
 		"moderator",
 	},
-	"POST /signin": {
-		"admin",
-		"moderator",
-		"user",
-	},
 }
 
 
@@ -107,6 +102,9 @@ var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
 
 func RoutesPrivileges(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		if c.Request().RequestURI == "/signin" {
+			return next(c)
+		}
 		pathMethod := c.Request().Method + " " + c.Path()
 		if temp := c.Get("user"); temp != nil {
 			u := temp.(*jwt.Token)

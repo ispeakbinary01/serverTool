@@ -11,9 +11,9 @@ import (
 func main() {
 	api := echo.New()
 	api.Use(middlewares.IsLoggedIn)
-	api.POST("/signin", handlers.Signin)
 	api.Use(middlewares.RoutesPrivileges)
 	api.Use(middleware.Secure())
+	api.POST("/signin", handlers.Signin) 									// Works
 	api.GET("/inventories/software", handlers.GetAllSoftware)               // Works
 	api.GET("/inventories/software/:id", handlers.GetSoftwareByID)          // Works
 	api.POST("/inventories/software", handlers.PostSoftware)                // Works
