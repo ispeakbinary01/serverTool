@@ -51,7 +51,7 @@ func GetAllServers() ([]Server, error) {
 	}
 	for res.Next() {
 		s := Server{}
-		err := res.Scan(&s.IP, &s.OS)
+		err := res.Scan(&s.ID, &s.IP, &s.OS)
 		if err != nil {
 			log.Printf("%s", err)
 			return nil, err
@@ -68,7 +68,7 @@ func GetServerByID(id string) (*Server, error) {
 	if res == nil {
 		return nil, nil
 	}
-	err := res.Scan(&s.IP, &s.OS)
+	err := res.Scan(&s.ID, &s.IP, &s.OS)
 	if err != nil {
 		log.Printf("%s", err)
 		return nil, err
@@ -170,7 +170,7 @@ DELETE FROM servers WHERE id = ?
 `
 
 const getServer = `
-SELECT ip, os FROM servers WHERE id = ?
+SELECT id, ip, os FROM servers WHERE id = ?
 `
 
 const getAllServers = `

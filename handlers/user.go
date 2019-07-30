@@ -93,6 +93,7 @@ func GetServersByUser(c echo.Context) error {
 // PatchRole ...
 func PatchRole(c echo.Context) error {
 	requestID := c.Param("id")
+	requestEmail := c.Param("email")
 	u := user.NewUser()
 	if err := c.Bind(u); err != nil {
 		log.Printf("%s", err)
@@ -103,7 +104,7 @@ func PatchRole(c echo.Context) error {
 		log.Printf("%s", err2)
 		return err2
 	}
-	return c.JSON(201, "Role changed on user " + requestID)
+	return c.JSON(201, "Role changed on user " + requestEmail)
 
 }
  

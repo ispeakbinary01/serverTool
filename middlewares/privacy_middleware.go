@@ -70,6 +70,12 @@ var routes = map[string][]string {
 	"DELETE /users/:id": {
 		"admin",
 	},
+	"GET /inventories/servers": {
+		"admin",
+	},
+	"GET /inventories/servers/:id": {
+		"admin",
+	},
 	"GET /inventories/serversSSH/": {
 		"admin",
 		"moderator",
