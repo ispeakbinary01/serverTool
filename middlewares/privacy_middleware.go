@@ -7,97 +7,6 @@ import (
 	"net/http"
 )
 
-var routes = map[string][]string {
-	"GET /inventories/software": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"GET /inventories/software/:id": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"POST /inventories/software": {
-		"admin",
-		"moderator",
-	},
-	"PUT /inventories/software/:id": {
-		"admin",
-		"moderator",
-	},
-	"DELETE /inventories/software/:id": {
-		"admin",
-	},
-	"GET /inventories/ssh": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"GET /inventories/ssh/:id": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"POST /inventories/ssh": {
-		"admin",
-		"moderator",
-	},
-	"PUT /inventories/ssh/:id": {
-		"admin",
-		"moderator",
-	},
-	"DELETE /inventories/ssh/:id": {
-		"admin",
-	},
-	"GET /users": {
-		"admin",
-		"moderator",
-	},
-	"GET /users/:id": {
-		"admin",
-		"moderator",
-	},
-	"POST /users": {
-		"admin",
-	},
-	"PUT /users/:id": {
-		"admin",
-	},
-	"PATCH /users/:id": {
-		"admin",
-	},
-	"DELETE /users/:id": {
-		"admin",
-	},
-	"GET /inventories/servers": {
-		"admin",
-	},
-	"GET /inventories/servers/:id": {
-		"admin",
-	},
-	"GET /inventories/serversSSH/": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"GET /inventories/serversSoftware/:id": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"GET /serversByUser": {
-		"admin",
-		"moderator",
-		"user",
-	},
-	"POST /inventories/servers": {
-		"admin",
-		"moderator",
-	},
-}
-
-
 
 var IsLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
 	SigningKey: []byte("secret"),
@@ -118,7 +27,7 @@ func RoutesPrivileges(next echo.HandlerFunc) echo.HandlerFunc {
 		if temp := c.Get("user"); temp != nil {
 			u := temp.(*jwt.Token)
 			claims := u.Claims.(jwt.MapClaims)
-			for _, item := range  routes[pathMethod] {
+			for _, item := range  Routes[pathMethod] {
 				if claims["role"] == item {
 					return next(c)
 				}
