@@ -36,6 +36,7 @@ func main() {
 	api.GET("/inventories/serversSoftware/:id", handlers.GetServerSoftware) // Works
 	api.GET("/serversByUser", handlers.GetServersByUser) 					// Works
 	api.POST("/inventories/servers", handlers.PostServer)                   // Works
+	api.POST("/inventories/addServerUser", handlers.AddServerToUser)
 
 	api.Start(":8080")
 

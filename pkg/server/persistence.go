@@ -136,7 +136,7 @@ func GetServerSSH(serverId string) ([]ssh.SSH, error) {
 }
 
 // GetServerSoftware
-func GetserverSoftware(serverId string) ([]software.Software, error) {
+func GetServerSoftware(serverId string) ([]software.Software, error) {
 	var sw []software.Software
 	id, err := strconv.Atoi(serverId)
 	if err != nil {
@@ -159,6 +159,24 @@ func GetserverSoftware(serverId string) ([]software.Software, error) {
 	}
 
 	return sw, nil
+}
+
+// AddServerToUser
+func AddServerToUser(userID int, serverID int) error {
+	stmt, err := db.Get().Prepare(userServerRel)
+	if err != nil {
+		log.Printf("%s", err)
+		return err
+	}
+	defer stmt.Close()
+
+	_, err2 := stmt.Exec(userID, serverID)
+	if err2 != nil {
+		log.Printf("%s", err2)
+		return err2
+	}
+	return nil
+
 }
 
 const userServerRel = `

@@ -87,7 +87,9 @@ var Routes = map[string][]string {
 	},
 	"POST /inventories/servers": {
 		"admin",
-		"moderator",
+	},
+	"POST /inventories/addServerUser": {
+		"admin",
 	},
 }
 
